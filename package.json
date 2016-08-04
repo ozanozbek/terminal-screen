@@ -1,0 +1,29 @@
+{
+  "name": "terminal-screen",
+  "version": "0.1.0",
+  "description": "terminal-screen is a terminal wrapper, providing easy access without ANSI codes or dirty details.",
+  "main": "src/terminal-screen.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eozan/terminal-screen.git"
+  },
+  "keywords": [
+    "terminal",
+    "console",
+    "ansi",
+    "position",
+    "style",
+    "color",
+    "256"
+  ],
+  "author": {
+    "name": "Ozan Ozbek",
+    "email": "erdemozanozbek@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eozan/terminal-screen/issues"
+  },
+  "homepage": "https://github.com/eozan/terminal-screen"
+}
