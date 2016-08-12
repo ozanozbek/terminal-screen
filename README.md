@@ -152,9 +152,9 @@ class TerminalScreen {
     setOptions(
         options     /* object */                = {},                   // Key/value pairs of objects
                     /* Possible options:
-                        stream, encoding, cursor,
-                        x, y, bgColor, fgColor,
-                        styles, wrap, scroll, lock
+                        encoding, cursor, x, y,
+                        bgColor, fgColor, styles,
+                        wrap, scroll, lock
                     */
         force       /* boolean */               = false                 // Force change
     ) {/* Sets multiple options at once. */}
@@ -176,9 +176,9 @@ class TerminalScreen {
         text        /* string */                = ''                    // Text to write,
         options     /* object */                = {},                   // Key/value pairs of objects
                     /* Possible options:
-                        stream, encoding, cursor,
-                        x, y, bgColor, fgColor,
-                        styles, wrap, scroll, lock
+                        encoding, cursor, x, y,
+                        bgColor, fgColor, styles,
+                        wrap, scroll, lock
                     */,
         revert      /* boolean */               = false,                // Reverts options back
         force       /* boolean */               = false                 // Force change
@@ -221,7 +221,7 @@ Possible style values:
 ]
 ```
 
-Style availability depends on system. For maximum compatibility, only `'bold'`, `'underline'` and `'reverse'` should be used. Combining multiple styles causes even more compatibility problems and should be done carefully.
+Style availability depends on system. For maximum compatibility, only `'bold'`, `'underline'` and `'reverse'` should be used. Combining multiple styles causes even more compatibility problems.
 
 # []()
 
