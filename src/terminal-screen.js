@@ -29,12 +29,14 @@ const TerminalScreen = class TerminalScreen {
             this.height = this.stream.rows;
             this.reset(true);
         }
+        return this;
     }
     setEncoding(encoding = 'utf8', force = false) {
         if (force || this.encoding !== encoding) {
             this.encoding = encoding;
             this.stream.setDefaultEncoding(encoding);
         }
+        return this;
     }
     setCursor(cursor = true, force = false) {
         if (force || this.cursor !== cursor) {
@@ -45,6 +47,7 @@ const TerminalScreen = class TerminalScreen {
                 this.codes.cursor.hide
             );
         }
+        return this;
     }
     setPosition(x = 0, y = 0, force = false) {
         x = x || Math.min(x, this.width);
@@ -54,18 +57,21 @@ const TerminalScreen = class TerminalScreen {
             this.options.y = y;
             this._escape(this.codes.cursor.position(x, y));
         }
+        return this;
     }
     setBgColor(color = 'black', force = false) {
         if (force || this.options.bgColor !== color) {
             this.options.bgColor = color;
             this._escape(this.codes.color.bg(color));
         }
+        return this;
     }
     setFgColor(color = 'white', force = false) {
         if (force || this.options.fgColor !== color) {
             this.options.fgColor = color;
             this._escape(this.codes.color.fg(color));
         }
+        return this;
     }
     setStyle(style, value = true, force = false) {
         if (
@@ -79,6 +85,7 @@ const TerminalScreen = class TerminalScreen {
             }
             this._escape(this.codes.styles[style][+value]);
         }
+        return this;
     }
     setStyles(styles = [], force = false) {
         this._escape(this.codes.styles.reset);
@@ -88,15 +95,19 @@ const TerminalScreen = class TerminalScreen {
         styles.forEach(function(style) {
             this.setStyle(style, true, force);
         }, this);
+        return this;
     }
     setWrap(wrap = true) {
         this.options.wrap = wrap;
+        return this;
     }
     setScroll(scroll = true) {
         this.options.scroll = scroll;
+        return this;
     }
-    setLock(lock = false) {
+    setLock(lock = true) {
         this.options.lock = lock;
+        return this;
     }
     setOptions(options = {}, force) {
         for (let key in options) {
@@ -108,10 +119,11 @@ const TerminalScreen = class TerminalScreen {
         if (options.x || options.y) {
             this.setPosition(options.x, options.y, force);
         }
+        return this;
     }
-    reset(clear = false) {
+    reset(clear = false, color) {
         if (clear) {
-            this.clear();
+            this.clear(color);
         }
         this.setEncoding();
         this.setCursor();
@@ -121,7 +133,8 @@ const TerminalScreen = class TerminalScreen {
         this.setStyles();
         this.setWrap();
         this.setScroll();
-        this.setLock();
+        this.setLock(false);
+        return this;
     }
     clear(color) {
         let currentBgColor = this.options.bgColor;
@@ -131,6 +144,7 @@ const TerminalScreen = class TerminalScreen {
         this._escape(this.codes.screen.clear);
         this.setBgColor(currentBgColor);
         this._escape(this.codes.cursor.restore);
+        return this;
     }
     write(text = '') {
         let position;
@@ -164,8 +178,9 @@ const TerminalScreen = class TerminalScreen {
             this.options.x = position.x;
             this.options.y = position.y;
         }
+        return this;
     }
-    w(text, options, revert, force) {
+    w(text, options, revert = false, force) {
         if (revert) {
             let current = Object.assign({}, this.options);
             this.setOptions(options, force);
@@ -175,6 +190,7 @@ const TerminalScreen = class TerminalScreen {
             this.setOptions(options, force);
             this.write(text);
         }
+        return this;
     }
     _write(text = '') {
         this.stream.write(text);
