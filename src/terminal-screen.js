@@ -2,36 +2,32 @@
 
 const codes = require('./codes');
 
-const styleList = [
-    'bold', 'dim', 'italic', 'underline',
-    'blink', 'reverse', 'hidden', 'strikethrough'
-];
-
 const TerminalScreen = class TerminalScreen {
-    constructor(stream, encoding) {
+    constructor(stream) {
         this.codes = codes;
-        this.width = null
-        this.height = null;
         this.stream = null;
-        this.encoding = null;
-        this.cursor = null;
-        this.position = {x: null, y: null};
-        this.bgColor = null;
-        this.fgColor = null;
-        this.styles = {};
-        let self = this;
-        styleList.forEach(function(key) {
-            self.styles[key] = null;
-        });
-        this.setStream(stream, false);
-        this.setEncoding(encoding);
+        this.width = null;
+        this.height = null;
+        this.options = {
+            encoding: undefined,
+            cursor: undefined,
+            x: undefined,
+            y: undefined,
+            bgColor: undefined,
+            fgColor: undefined,
+            styles: new Set(),
+            wrap: false,
+            scroll: false,
+            lock: false
+        };
+        this.setStream(stream);
     }
     setStream(stream = process.stdout, force = false) {
         if (force || this.stream !== stream) {
             this.stream = stream;
             this.width = this.stream.columns;
             this.height = this.stream.rows;
-            this.reset();
+            this.reset(true);
         }
     }
     setEncoding(encoding = 'utf8', force = false) {
@@ -40,129 +36,145 @@ const TerminalScreen = class TerminalScreen {
             this.stream.setDefaultEncoding(encoding);
         }
     }
-    reset(force) {
-        this.clear();
-        this.setPosition(undefined, undefined, force);
-        this.setBgColor(undefined, force);
-        this.setFgColor(undefined, force);
-        this.resetStyles();
-    }
-    clear(bgColor = 'black') {
-        let currentBgColor = this.bgColor;
-        this._escape(this.codes.cursor.save);
-        this.setPosition(0, 0, true);
-        this.setBgColor(bgColor);
-        this._escape(this.codes.screen.clear);
-        this.setBgColor(currentBgColor);
-        this._escape(this.codes.cursor.restore);
-    }
-    showCursor(force = false) {
-        if (force || !this.cursor) {
-            this.cursor = true;
-            this._escape(this.codes.cursor.show);
-        }
-    }
-    hideCursor(force = false) {
-        if (force || this.cursor !== false) {
-            this.cursor = false;
-            this._escape(this.codes.cursor.hide);
+    setCursor(cursor = true, force = false) {
+        if (force || this.cursor !== cursor) {
+            this.cursor = cursor;
+            this._escape(
+                cursor ?
+                this.codes.cursor.show :
+                this.codes.cursor.hide
+            );
         }
     }
     setPosition(x = 0, y = 0, force = false) {
         x = x || Math.min(x, this.width);
         y = y || Math.min(y, this.height);
-        if (force || this.position.x !== x || this.position.y !== y) {
-            this.position = {x: x, y: y};
+        if (force || this.options.x !== x || this.options.y !== y) {
+            this.options.x = x;
+            this.options.y = y;
             this._escape(this.codes.cursor.position(x, y));
         }
     }
     setBgColor(color = 'black', force = false) {
-        if (force || this.bgColor !== color) {
-            this.bgColor = color;
+        if (force || this.options.bgColor !== color) {
+            this.options.bgColor = color;
             this._escape(this.codes.color.bg(color));
         }
     }
     setFgColor(color = 'white', force = false) {
-        if (force || this.fgColor !== color) {
-            this.fgColor = color;
+        if (force || this.options.fgColor !== color) {
+            this.options.fgColor = color;
             this._escape(this.codes.color.fg(color));
         }
     }
     setStyle(style, value = true, force = false) {
         if (
-            Object.keys(this.styles).includes(style) &&
-            (force || this.styles[style] !== value)
+            force ||
+            !!value !== this.options.styles.has(style)
         ) {
-            this.styles[style] = value;
+            if (value) {
+                this.options.styles.add(style);
+            } else {
+                this.options.styles.delete(style);
+            }
             this._escape(this.codes.styles[style][+value]);
         }
     }
-    setStyles(styles = [], force) {
-        for (let key in this.styles) {
-            if (styles.includes(key)) {
-                this.setStyle(key, true, force);
-            } else {
-                this.setStyle(key, false, force);
+    setStyles(styles = [], force = false) {
+        this._escape(this.codes.styles.reset);
+        this.setBgColor(this.options.bgColor, true);
+        this.setFgColor(this.options.fgColor, true);
+        this.options.styles.clear();
+        styles.forEach(function(style) {
+            this.setStyle(style, true, force);
+        }, this);
+    }
+    setWrap(wrap = true) {
+        this.options.wrap = wrap;
+    }
+    setScroll(scroll = true) {
+        this.options.scroll = scroll;
+    }
+    setLock(lock = false) {
+        this.options.lock = lock;
+    }
+    setOptions(options = {}, force) {
+        for (let key in options) {
+            let fn = this['set' + key.charAt(0).toUpperCase() + key.slice(1)];
+            if (typeof fn === 'function') {
+                fn.apply(this, [options[key], force]);
             }
         }
-    }
-    resetStyles() {
-        for (let key in this.styles) {
-            this.styles[key] = false;
-        }
-        this._escape(this.codes.styles.reset);
-    }
-    setAll(options = {}, force) {
         if (options.x || options.y) {
             this.setPosition(options.x, options.y, force);
         }
-        if (options.bgColor) {
-            this.setBgColor(options.bgColor, force);
-        }
-        if (options.fgColor) {
-            this.setFgColor(options.fgColor, force);
-        }
-        if (options.styles) {
-            this.setStyles(options.styles, force);
-        }
     }
-    write(text = '', wrap = false, scroll = false) {
-        if (!scroll) {
-            let limit = wrap ? (
+    reset(clear = false) {
+        if (clear) {
+            this.clear();
+        }
+        this.setEncoding();
+        this.setCursor();
+        this.setPosition();
+        this.setBgColor();
+        this.setFgColor();
+        this.setStyles();
+        this.setWrap();
+        this.setScroll();
+        this.setLock();
+    }
+    clear(color) {
+        let currentBgColor = this.options.bgColor;
+        this._escape(this.codes.cursor.save);
+        this.setPosition(0, 0, true);
+        this.setBgColor(color);
+        this._escape(this.codes.screen.clear);
+        this.setBgColor(currentBgColor);
+        this._escape(this.codes.cursor.restore);
+    }
+    write(text = '') {
+        let position;
+        if (this.options.lock) {
+            position = {x: this.options.x, y: this.options.y};
+            this._escape(this.codes.cursor.save);
+        }
+
+        let current = Object.assign({}, this.options);
+        if (!this.options.scroll) {
+            let limit = this.options.wrap ? (
                 this.width * this.height
-                - Math.max((this.position.y - 1), 0) * this.width
-                - this.position.x
-            ) : this.width - this.position.x;
+                - Math.max((this.options.y - 1), 0) * this.width
+                - this.options.x
+            ) : this.width - this.options.x;
             text = text.slice(0, limit);
         }
 
         this._write(text);
-        this.position = {
-            x: (this.position.x + text.length) % this.width,
-            y: Math.max(this.position.y + Math.floor((this.position.x + text.length) % this.width), this.height)
-        };
+        let currentX = this.options.x;
+        this.options.x = (this.options.x + text.length) % this.width;
+        this.options.y = Math.max(
+            this.options.y + Math.floor(
+                (currentX + text.length) % this.width
+            ),
+            this.height
+        );
+
+        if (this.options.lock) {
+            this._escape(this.codes.cursor.restore);
+            this.options.x = position.x;
+            this.options.y = position.y;
+        }
     }
-    put(text = '', wrap, scroll) {
-        let position = this.position;
-        this._escape(this.codes.cursor.save);
-        this.write(text, wrap, scroll);
-        this._escape(this.codes.cursor.restore);
-        this.position = position;
-    }
-    w(text, options, force) {
-        this._short('write', text, options, force);
-    }
-    p(text, options, force) {
-        this._short('put', text, options, force);
-    }
-    _short(fnName, text, options, force) {
-        this.setAll({
-            x: options.x, y: options.y,
-            bgColor: options.bgColor,
-            fgColor: options.fgColor,
-            styles: options.styles
-        }, force);
-        this[fnName](text, options.wrap, options.scroll);
+    w(text, options, revert, force) {
+        if (revert) {
+            let current = Object.assign({}, this.options);
+            this.setOptions(options, force);
+            this.write(text);
+            this.setOptions(current, force);
+        } else {
+            this.setOptions(options, force);
+            this.write(text);
+        }
     }
     _write(text = '') {
         this.stream.write(text);

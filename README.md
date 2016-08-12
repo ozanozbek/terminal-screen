@@ -35,7 +35,7 @@ const t = new TerminalScreen();
 t.clear();
 
 // show/hide cursor
-t.hideCursor();
+t.setCursor(false);
 
 // set background/foreground color
 t.setBgColor('magenta');
@@ -65,145 +65,12 @@ t.w('Goodbye world!', {
 
 #### Properties
 ```javascript
-{
-    codes       /*object*/,                             // Lookup table of ANSI codes
-    stream      /*WritableStream*/,                     // Wrapped stream
-    encoding    /*string*/,                             // Encoding
-    width       /*number*/,                             // Screen width
-    height      /*number*/,                             // Screen height
-    cursor      /*boolean*/,                            // Current cursor visibility
-    position    /*object*/,                             // Current cursor position {x, y} 
-    bgColor     /*string*/,                             // Current background color
-    fgColor     /*string*/,                             // Current foreground color
-    styles      /*object*/                              // Current styles {bold, dim, italic, underline, blink, reverse, hidden, strikethrough}
-}
+
 ```
 
 #### Methods
 ```javascript
-constructor(
-    stream      /*WritableStream*/  = process.stdout,  // Output stream
-    encoding    /*string*/          = 'utf8'           // Encoding to set the stream to
-)
-```
 
-```javascript
-setStream(      // Sets stream, resets all settings.
-    stream      /*WritableStream*/  = process.stdout,   // Output stream
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-setEncoding(    // Sets encoding of current stream.
-    encoding    /*string*/          = 'utf8',           // Encoding to set the stream to
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-reset(          // Resets all position, color and style settings.
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-clear(          // Clears screen.
-    bgColor     /*string*/          = 'black'           // Color name
-)
-```
-
-```javascript
-showCursor(     // Shows cursor.
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-hideCursor(     // Hides cursor.
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-setPosition(    // Sets cursor position.
-    x           /*number*/          = 0,                // Zero-indexed X coordinate
-    y           /*number*/          = 0,                // Zero-indexed Y coordinate
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-setBgColor(     // Sets background color.
-    color       /*string*/          = 'black',          // Color name
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-setFgColor(     // Sets foreground color.
-    color       /*string*/          = 'white',          // Color name
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-setStyle(       // Enables/disables a style.
-    style       /*string*/          = undefined,        // Style name
-    value       /*boolean*/         = true,             // Value to set the style to
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-setStyles(      // Disables all styles, enables only given ones.
-    styles      /*array*/          = [],                // Style names
-    force       /*boolean*/        = false              // Forces change even if it is not needed
-)
-```
-
-```javascript
-resetStyles(    // Resets all styles.
-)
-```
-
-```javascript
-setAll(         // Sets position, colors and styles.
-    options     /*object*/          = {},               // Container with x, y, bgColor, fgColor, styles keys
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-write(          // Writes text to screen.
-    text        /*string*/          = '',               // Text to write
-    wrap        /*boolean*/         = false,            // Enables/disables wrapping
-    scroll      /*boolean*/         = false             // Enables/disables scrolling
-)
-```
-
-```javascript
-put(            // Writes text to screen. Does not change cursor position.
-    text        /*string*/          = '',               // Text to write
-    wrap        /*boolean*/         = false,            // Enables/disables wrapping
-    scroll      /*boolean*/         = false             // Enables/disables scrolling
-)
-```
-
-```javascript
-w(              // Shortcut method for changing all settings and then writing text.
-    text        /*string*/          = '',               // Text to write
-    options     /*object*/          = {},               // Container with x, y, bgColor, fgColor, styles, wrap and scroll keys
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
-```
-
-```javascript
-p(              // Shortcut method for changing all settings and then putting text.
-    text        /*string*/          = '',               // Text to write
-    options     /*object*/          = {},               // Container with x, y, bgColor, fgColor, styles, wrap and scroll keys
-    force       /*boolean*/         = false             // Forces change even if it is not needed
-)
 ```
 
 # []()
@@ -241,7 +108,7 @@ Possible style values:
 ]
 ```
 
-Style availability depends on system. For maximum compatibility, only `'bold'`, `'underline'` and `'reverse'` should be used. Combining multiple styles poses another compatibility problem and should be done carefully.
+Style availability depends on system. For maximum compatibility, only `'bold'`, `'underline'` and `'reverse'` should be used. Combining multiple styles causes even more compatibility problems and should be done carefully.
 
 # []()
 

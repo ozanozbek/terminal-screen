@@ -9,7 +9,7 @@ const t = new TerminalScreen();
 t.clear();
 
 // show/hide cursor
-t.hideCursor();
+t.setCursor(false);
 
 // set background/foreground color
 t.setBgColor('magenta');
@@ -32,6 +32,4 @@ t.w('Goodbye world!', {
     wrap: true
 });
 
-t.setPosition();
-t.resetStyles();
-t.showCursor();
+t.reset();
