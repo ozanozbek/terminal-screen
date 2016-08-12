@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/eozan/terminal-screen",
   "devDependencies": {
+    "sinon": "^1.17.5",
     "tape": "^4.6.0"
   }
 }

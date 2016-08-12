@@ -32,7 +32,7 @@ const TerminalScreen = class TerminalScreen {
         return this;
     }
     setEncoding(encoding = 'utf8', force = false) {
-        if (force || this.encoding !== encoding) {
+        if (force || this.options.encoding !== encoding) {
             this.options.encoding = encoding;
             this.stream.setDefaultEncoding(encoding);
         }
