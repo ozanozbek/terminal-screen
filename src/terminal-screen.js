@@ -105,7 +105,7 @@ const TerminalScreen = class TerminalScreen {
         this.options.scroll = scroll;
         return this;
     }
-    setLock(lock = false) {
+    setLock(lock = true) {
         this.options.lock = lock;
         return this;
     }
@@ -133,7 +133,7 @@ const TerminalScreen = class TerminalScreen {
         this.setStyles();
         this.setWrap();
         this.setScroll();
-        this.setLock();
+        this.setLock(false);
         return this;
     }
     clear(color) {
@@ -180,7 +180,7 @@ const TerminalScreen = class TerminalScreen {
         }
         return this;
     }
-    w(text, options, revert, force) {
+    w(text, options, revert = false, force) {
         if (revert) {
             let current = Object.assign({}, this.options);
             this.setOptions(options, force);
