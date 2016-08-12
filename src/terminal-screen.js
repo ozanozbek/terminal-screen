@@ -33,14 +33,14 @@ const TerminalScreen = class TerminalScreen {
     }
     setEncoding(encoding = 'utf8', force = false) {
         if (force || this.encoding !== encoding) {
-            this.encoding = encoding;
+            this.options.encoding = encoding;
             this.stream.setDefaultEncoding(encoding);
         }
         return this;
     }
     setCursor(cursor = true, force = false) {
         if (force || this.cursor !== cursor) {
-            this.cursor = cursor;
+            this.options.cursor = cursor;
             this._escape(
                 cursor ?
                 this.codes.cursor.show :
