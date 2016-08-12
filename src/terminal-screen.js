@@ -39,7 +39,7 @@ const TerminalScreen = class TerminalScreen {
         return this;
     }
     setCursor(cursor = true, force = false) {
-        if (force || this.cursor !== cursor) {
+        if (force || this.options.cursor !== cursor) {
             this.options.cursor = cursor;
             this._escape(
                 cursor ?
@@ -49,9 +49,21 @@ const TerminalScreen = class TerminalScreen {
         }
         return this;
     }
+    setWrap(wrap = true) {
+        this.options.wrap = wrap;
+        return this;
+    }
+    setScroll(scroll = true) {
+        this.options.scroll = scroll;
+        return this;
+    }
+    setLock(lock = true) {
+        this.options.lock = lock;
+        return this;
+    }
     setPosition(x = 0, y = 0, force = false) {
-        x = x || Math.min(x, this.width);
-        y = y || Math.min(y, this.height);
+        x = Math.min(x, this.width);
+        y = Math.min(y, this.height);
         if (force || this.options.x !== x || this.options.y !== y) {
             this.options.x = x;
             this.options.y = y;
@@ -95,18 +107,6 @@ const TerminalScreen = class TerminalScreen {
         styles.forEach(function(style) {
             this.setStyle(style, true, force);
         }, this);
-        return this;
-    }
-    setWrap(wrap = true) {
-        this.options.wrap = wrap;
-        return this;
-    }
-    setScroll(scroll = true) {
-        this.options.scroll = scroll;
-        return this;
-    }
-    setLock(lock = true) {
-        this.options.lock = lock;
         return this;
     }
     setOptions(options = {}, force) {
