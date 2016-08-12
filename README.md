@@ -63,14 +63,28 @@ t.w('Goodbye world!', {
 
 ### API
 #### Instance properties
+```javascript
+{
+    // All properties are read-only and should only be changed using setter methods.
 
-All properties are read-only, and should only be changed using setter methods.
-
-- .codes: Ansi code lookup table used by terminal-screen
-- .stream: Wrapped stream
-- .width: Width of current terminal
-- .height: Height of current terminal
-- .options: Current state of terminal-screen
+    codes:          {},              // Ansi code lookup table used for operations
+    stream:         process.stdout,  // Wrapped stream
+    width:          0,               // Width of stream
+    height:         0,               // Height of stream
+    options: {                       // Current options
+        encoding:   'utf8',
+        cursor:     true,
+        x:          0,
+        y:          0,
+        bgColor:    'black',
+        fgColor:    'white',
+        styles:     [],
+        wrap:       true,
+        scroll:     true,
+        lock:       false
+    }
+}
+```
 
 #### Instance methods
 ```javascript
