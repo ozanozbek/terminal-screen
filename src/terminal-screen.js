@@ -84,7 +84,7 @@ const TerminalScreen = class TerminalScreen {
     setStyle(style, value = true, force = false) {
         if (
             force ||
-            !!value !== !!this.options.styles.has(style)
+            !!value !== this.options.styles.has(style)
         ) {
             if (value) {
                 this.options.styles.add(style);
@@ -98,7 +98,7 @@ const TerminalScreen = class TerminalScreen {
         this._escape(this.codes.styles.reset);
         this.setBgColor(this.options.bgColor, true);
         this.setFgColor(this.options.fgColor, true);
-        this.options.styles = new Set(styles);
+        this.options.styles.clear();
         styles.forEach(function(style) {
             this.setStyle(style, true, force);
         }, this);
