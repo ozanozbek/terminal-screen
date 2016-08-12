@@ -113,32 +113,14 @@ const TerminalScreen = class TerminalScreen {
         this.options.lock = lock;
     }
     setOptions(options = {}, force) {
-        if (options.encoding !== undefined) {
-            this.setEncoding(options.encoding, force);
+        for (let key in options) {
+            let fn = this['set' + key.charAt(0).toUpperCase() + key.slice(1)];
+            if (typeof fn === 'function') {
+                fn.apply(this, [options[key], force]);
+            }
         }
-        if (options.cursor !== undefined) {
-            this.setCursor(options.cursor, force);
-        }
-        if (options.x !== undefined || options.y !== undefined) {
+        if (options.x || options.y) {
             this.setPosition(options.x, options.y, force);
-        }
-        if (options.bgColor !== undefined) {
-            this.setBgColor(options.bgColor, force);
-        }
-        if (options.fgColor !== undefined) {
-            this.setFgColor(options.fgColor, force);
-        }
-        if (options.styles !== undefined) {
-            this.setStyles(options.styles, force);
-        }
-        if (options.wrap !== undefined) {
-            this.setWrap(options.wrap, force);
-        }
-        if (options.scroll !== undefined) {
-            this.setScroll(options.scroll, force);
-        }
-        if (options.lock !== undefined) {
-            this.setLock(options.lock, force);
         }
     }
     clear(color) {
@@ -184,20 +166,14 @@ const TerminalScreen = class TerminalScreen {
         }
     }
     w(text, options, revert, force) {
-        this._short('write', text, options, revert, force);
-    }
-    p(text, options, revert, force) {
-        this._short('put', text, options, revert, force);
-    }
-    _short(fnName, text, options, revert = false, force) {
         if (revert) {
             let current = Object.assign({}, this.options);
             this.setOptions(options, force);
-            this[fnName](text);
+            this.write(text);
             this.setOptions(current, force);
         } else {
             this.setOptions(options, force);
-            this[fnName](text);
+            this.write(text);
         }
     }
     _write(text = '') {
