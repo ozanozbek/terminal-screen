@@ -63,25 +63,15 @@ t.w('Goodbye world!', {
 
 ### API
 
-#### Properties
-```javascript
+#### Instance properties
 codes
 stream
 width
 height
-options.encoding
-options.cursor
-options.x
-options.y
-options.bgColor
-options.fgColor
-options.styles
-options.wrap
-options.scroll
-options.lock
+options
 ```
 
-#### Methods
+#### Instance methods
 ```javascript
 constructor(stream)
 setStream(stream, force)
