@@ -109,9 +109,9 @@ const TerminalScreen = class TerminalScreen {
             this.setPosition(options.x, options.y, force);
         }
     }
-    reset(clear = false) {
+    reset(clear = false, color) {
         if (clear) {
-            this.clear();
+            this.clear(color);
         }
         this.setEncoding();
         this.setCursor();

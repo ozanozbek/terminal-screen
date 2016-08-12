@@ -65,12 +65,41 @@ t.w('Goodbye world!', {
 
 #### Properties
 ```javascript
-
+codes
+stream
+width
+height
+options.encoding
+options.cursor
+options.x
+options.y
+options.bgColor
+options.fgColor
+options.styles
+options.wrap
+options.scroll
+options.lock
 ```
 
 #### Methods
 ```javascript
-
+constructor(stream)
+setStream(stream, force)
+setEncoding(encoding, force)
+setCursor(cursor, force)
+setPosition(x, y, force)
+setBgColor(color, force)
+setFgColor(color, force)
+setStyle(style, value, force)
+setStyles(styles, force)
+setWrap(wrap, force)
+setScroll(scroll, force)
+setLock(lock, force)
+setOptions(options, force)
+reset(clear, color)
+clear(color)
+write(text)
+w(text, options, revert, force)
 ```
 
 # []()
