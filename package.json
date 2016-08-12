@@ -4,7 +4,7 @@
   "description": "terminal-screen is a terminal wrapper, providing easy access without ANSI codes or dirty details.",
   "main": "src/terminal-screen.js",
   "scripts": {
-    "test": "node tests/core.js"
+    "test": "node tests/main.js"
   },
   "repository": {
     "type": "git",
