@@ -30,20 +30,6 @@ const TerminalScreen = class TerminalScreen {
             this.reset(true);
         }
     }
-    reset(clear = false) {
-        if (clear) {
-            this.clear();
-        }
-        this.setEncoding();
-        this.setCursor();
-        this.setPosition();
-        this.setBgColor();
-        this.setFgColor();
-        this.setStyles();
-        this.setWrap();
-        this.setScroll();
-        this.setLock();
-    }
     setEncoding(encoding = 'utf8', force = false) {
         if (force || this.encoding !== encoding) {
             this.encoding = encoding;
@@ -69,16 +55,16 @@ const TerminalScreen = class TerminalScreen {
             this._escape(this.codes.cursor.position(x, y));
         }
     }
-    setBgColor(bgColor = 'black', force = false) {
-        if (force || this.options.bgColor !== bgColor) {
-            this.options.bgColor = bgColor;
-            this._escape(this.codes.color.bg(bgColor));
+    setBgColor(color = 'black', force = false) {
+        if (force || this.options.bgColor !== color) {
+            this.options.bgColor = color;
+            this._escape(this.codes.color.bg(color));
         }
     }
-    setFgColor(fgColor = 'white', force = false) {
-        if (force || this.options.fgColor !== fgColor) {
-            this.options.fgColor = fgColor;
-            this._escape(this.codes.color.fg(fgColor));
+    setFgColor(color = 'white', force = false) {
+        if (force || this.options.fgColor !== color) {
+            this.options.fgColor = color;
+            this._escape(this.codes.color.fg(color));
         }
     }
     setStyle(style, value = true, force = false) {
@@ -122,6 +108,20 @@ const TerminalScreen = class TerminalScreen {
         if (options.x || options.y) {
             this.setPosition(options.x, options.y, force);
         }
+    }
+    reset(clear = false) {
+        if (clear) {
+            this.clear();
+        }
+        this.setEncoding();
+        this.setCursor();
+        this.setPosition();
+        this.setBgColor();
+        this.setFgColor();
+        this.setStyles();
+        this.setWrap();
+        this.setScroll();
+        this.setLock();
     }
     clear(color) {
         let currentBgColor = this.options.bgColor;
