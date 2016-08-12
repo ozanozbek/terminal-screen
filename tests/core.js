@@ -81,3 +81,26 @@ test('setEncoding', function(t) {
 
     t.end();
 });
+
+test('setCursor', function(t) {
+    let stream = new MockStream(4, 4);
+    let ts = new TerminalScreen(stream);
+    let spy = sinon.spy(ts, '_escape');
+
+    ts.setCursor(undefined, true);
+    t.equal(ts.options.cursor, defaultOptions.cursor, 'sets default');
+
+    ts.setCursor(false);
+    t.equal(ts.options.cursor, false, 'sets cursor');
+    t.equal(spy.withArgs(false).callCount, 2, 'calls setDefaultEncoding');
+
+    /*ts.setEncoding('ascii');
+    t.equal(spy.callCount, 2, 'compares current');
+
+    ts.setEncoding('ascii', true);
+    t.equal(spy.callCount, 3, 'forces change');
+
+    t.equal(ts, ts.setEncoding(), 'returns instance');*/
+
+    t.end();
+});
