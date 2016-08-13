@@ -2,7 +2,6 @@
 
 const codes = require('./codes');
 const defaultOptions = require('./default-options');
-const resetOptions = Object.assign({}, defaultOptions, {lock: false});
 
 const TerminalScreen = class TerminalScreen {
     constructor(stream) {

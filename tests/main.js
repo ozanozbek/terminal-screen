@@ -12,14 +12,14 @@ const resetOptions = Object.assign({}, defaultOptions, {lock: false});
 
 test('construct', function(t) {
     let stream = new MockStream(4, 4);
+    let stub = sinon.stub(TerminalScreen.prototype, 'setStream');
     let ts = new TerminalScreen(stream);
     
-    t.ok(ts instanceof TerminalScreen, 'initialization');
+    t.ok(ts instanceof TerminalScreen, 'initializes');
     t.equal(ts.codes, codes, 'sets codes');
-    t.equal(ts.stream, stream, 'sets stream');
-    t.equal(ts.width, stream.columns, 'sets width');
-    t.equal(ts.height, stream.rows, 'sets height');
-    t.deepLooseEqual(ts.options, resetOptions, 'resets options');
+    t.equal(stub.callCount, 1, 'calls setStream');
+
+    stub.restore();
     
     t.end();
 });
@@ -130,7 +130,7 @@ test('setLock', function(t) {
     let ts = new TerminalScreen(stream);
 
     ts.setLock(undefined, true);
-    t.equal(ts.options.lock, true, 'sets default');
+    t.equal(ts.options.lock, defaultOptions.lock, 'sets default');
 
     ts.setLock(false);
     t.equal(ts.options.lock, false, 'sets lock');
