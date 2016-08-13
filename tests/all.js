@@ -13,3 +13,7 @@ require('./set-fg-color');
 require('./set-style');
 require('./set-styles');
 require('./set-options');
+require('./reset');
+require('./clear');
+require('./write');
+require('./w');
