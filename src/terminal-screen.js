@@ -1,6 +1,8 @@
 'use strict';
 
 const codes = require('./codes');
+const defaultOptions = require('./default-options');
+const resetOptions = Object.assign({}, defaultOptions, {lock: false});
 
 const TerminalScreen = class TerminalScreen {
     constructor(stream) {
@@ -31,14 +33,14 @@ const TerminalScreen = class TerminalScreen {
         }
         return this;
     }
-    setEncoding(encoding = 'utf8', force = false) {
+    setEncoding(encoding = defaultOptions.encoding, force = false) {
         if (force || this.options.encoding !== encoding) {
             this.options.encoding = encoding;
             this.stream.setDefaultEncoding(encoding);
         }
         return this;
     }
-    setCursor(cursor = true, force = false) {
+    setCursor(cursor = defaultOptions.cursor, force = false) {
         if (force || this.options.cursor !== cursor) {
             this.options.cursor = cursor;
             this._escape(
@@ -49,19 +51,19 @@ const TerminalScreen = class TerminalScreen {
         }
         return this;
     }
-    setWrap(wrap = true) {
+    setWrap(wrap = defaultOptions.wrap) {
         this.options.wrap = wrap;
         return this;
     }
-    setScroll(scroll = true) {
+    setScroll(scroll = defaultOptions.scroll) {
         this.options.scroll = scroll;
         return this;
     }
-    setLock(lock = true) {
+    setLock(lock = defaultOptions.lock) {
         this.options.lock = lock;
         return this;
     }
-    setPosition(x = 0, y = 0, force = false) {
+    setPosition(x = defaultOptions.x, y = defaultOptions.y, force = false) {
         x = Math.min(x, this.width);
         y = Math.min(y, this.height);
         if (force || this.options.x !== x || this.options.y !== y) {
@@ -71,14 +73,14 @@ const TerminalScreen = class TerminalScreen {
         }
         return this;
     }
-    setBgColor(color = 'black', force = false) {
+    setBgColor(color = defaultOptions.bgColor, force = false) {
         if (force || this.options.bgColor !== color) {
             this.options.bgColor = color;
             this._escape(this.codes.color.bg(color));
         }
         return this;
     }
-    setFgColor(color = 'white', force = false) {
+    setFgColor(color = defaultOptions.fgColor, force = false) {
         if (force || this.options.fgColor !== color) {
             this.options.fgColor = color;
             this._escape(this.codes.color.fg(color));
@@ -99,7 +101,7 @@ const TerminalScreen = class TerminalScreen {
         }
         return this;
     }
-    setStyles(styles = [], force = false) {
+    setStyles(styles = defaultOptions.styles, force = false) {
         this._escape(this.codes.styles.reset);
         this.setBgColor(this.options.bgColor, true);
         this.setFgColor(this.options.fgColor, true);
