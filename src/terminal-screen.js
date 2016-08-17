@@ -149,105 +149,31 @@ const TerminalScreen = class TerminalScreen {
     }
 
     write(text = '') {
+        // TODO: Scroll and wrap should be implemented.
         let lockPosition;
         if (this.options.lock) {
             lockPosition = {x: this.options.x, y: this.options.y};
             this._escape(this.codes.cursor.save);
         }
 
-        let limit = null;
-        if (this.options.wrap) {
-            if (this.options.scroll) {
-                limit = Math.ceil((
-                    (this.width * this.height)
-                    - ((this.options.y - 1) * this.width + this.options.x)
-                ) / this.width);
-            } else {
-                limit = this.width - this.options.x;
-            }
-        }
-        text = text.slice(0, limit);
+        text = text.slice(0, this.width - (this.options.x + text.length));
+
+        this._write(text);
+
+        this.options.x = this.options.x + text.length;
 
         if (this.options.lock) {
             this._escape(this.codes.cursor.restore);
             this.options.x = lockPosition.x;
             this.options.y = lockPosition.y;
         }
+
+        if (this.options.x > this.width - 1) {
+            this.setPosition(this.width - 1, this.options.y);
+        }
         return this;
     }
 
-    /*write(text = '') {
-        let position;
-        if (this.options.lock) {
-            position = {x: this.options.x, y: this.options.y};
-            this._escape(this.codes.cursor.save);
-        }
-
-        if (!this.options.wrap && !this.options.scroll) {
-            text = text.slice(0, this.width - this.options.x - 1);
-        } else if (this.options.wrap && !this.options.scroll) {
-            text = text.slice(0,
-                (this.width * this.height) - (
-                    Math.max(this.options.y, 0) * this.width
-                    + this.options.x
-                )
-            );
-        }
-        this._write(text);
-
-        if (this.options.lock) {
-            this._escape(this.codes.cursor.restore);
-            this.options.x = position.x;
-            this.options.y = position.y;
-        } else {
-            let currentX = this.options.x;
-            console.log(text);
-            this.options.x = (!this.options.scroll && ) ? (this.options.x + text.length) % this.width;
-            this.options.y = Math.min(
-                this.options.y + Math.floor(
-                    (currentX + text.length) / this.width
-                ),
-                this.height - 1
-            );
-            if (this.options.x > this.width - 1) {
-                this.setPosition(this.width - 1, this.options.y);
-            }
-        }
-        return this;
-    }*/
-    /*write(text = '') {
-        let position;
-        if (this.options.lock) {
-            position = {x: this.options.x, y: this.options.y};
-            this._escape(this.codes.cursor.save);
-        }
-
-        if (!this.options.scroll) {
-            let limit = this.options.wrap ? (
-                this.width * this.height
-                - Math.max((this.options.y - 1), 0) * this.width
-                - this.options.x
-            ) : this.width - this.options.x;
-            text = text.slice(0, limit);
-        }
-
-        this._write(text);
-        let currentX = this.options.x;
-        this.options.x = (this.options.x + text.length) % this.width;
-        this.options.y = Math.max(
-            this.options.y + Math.floor(
-                (currentX + text.length) % this.width
-            ),
-            this.height
-        );
-
-        if (this.options.lock) {
-            this._escape(this.codes.cursor.restore);
-            this.options.x = position.x;
-            this.options.y = position.y;
-        }
-        return this;
-    }*/
     w(text, options, revert = false, force) {
         if (revert) {
             let current = Object.assign({}, this.options);

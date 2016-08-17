@@ -143,7 +143,7 @@ class TerminalScreen {
     
     setScroll(
         scroll      /* boolean */               = true                  // scroll status
-    ) {/* Enables or disables scrolling screen when wrapping text. */}
+    ) {/* Enables or disables vertical scrolling screen when wrapping text. */}
     
     setLock(
         lock        /* boolean */               = true                  // lock status
@@ -222,6 +222,12 @@ Possible style values:
 ```
 
 Style availability depends on system. For maximum compatibility, only `'bold'`, `'underline'` and `'reverse'` should be used. Combining multiple styles causes even more compatibility problems.
+
+# []()
+
+### Note on wrap and scroll options
+
+Currently `wrap` and `scroll` options are not working, and they are assumed `false` for write operations. They can still be set, but they will have no effect.
 
 # []()
 
