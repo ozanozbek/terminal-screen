@@ -5,6 +5,7 @@
 [API](#api) |
 [Colors](#colors) |
 [Styles](#styles) |
+[Notes](#notes) |
 [License](#license)
 
 terminal-screen is a terminal wrapper, providing easy access without ANSI codes or dirty details.
@@ -225,9 +226,9 @@ Style availability depends on system. For maximum compatibility, only `'bold'`, 
 
 # []()
 
-### Note on wrap and scroll options
+### Notes
 
-Currently `wrap` and `scroll` options are not working, and they are assumed `false` for write operations. They can still be set, but they will have no effect.
+- Currently `wrap` and `scroll` options are in development and not working, and they are assumed `false` for write operations. They can still be set, but they will have no effect.
 
 # []()
 
