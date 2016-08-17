@@ -1,5 +1,6 @@
 # terminal-screen
 
+[Status](#status) |
 [Installation](#installation) |
 [Usage](#usage) |
 [API](#api) |
@@ -13,6 +14,12 @@ terminal-screen is a terminal wrapper, providing easy access without ANSI codes 
 - Handles position, color and styling
 - Supports 256 color
 - No dependencies
+
+# []()
+
+### Status
+
+[![Build Status](https://travis-ci.org/eozan/terminal-screen.svg?branch=master)](https://travis-ci.org/eozan/terminal-screen)
 
 # []()
 
