@@ -1,27 +1,11 @@
 'use strict';
 
 const colorNames = [
-    'black',
-    'red',
-    'green',
-    'yellow',
-    'blue',
-    'magenta',
-    'cyan',
-    'white'
+    'black', 'red', 'green', 'yellow',
+    'blue', 'magenta', 'cyan', 'white'
 ];
 
-const rgb6 = (r = 0, g = 0, b = 0) => rgb6[
-    r.toString() +
-    g.toString() +
-    b.toString()
-];
-for (let i = 0; i < 216; i++) {
-    let r = Math.floor(i / 36).toString() || '0';
-    let g = Math.floor((i % 36) / 6).toString() || '0';
-    let b = Math.floor((i % 36 % 6)).toString() || '0';
-    rgb6[r + g + b] = i + 16;
-}
+const rgb6 = (r = 0, g = 0, b = 0) => parseInt(r.toString() + g.toString() + b.toString(), 6) + 16;
 
 const rgb256 = (r = 0, g = 0, b = 0) => rgb6(
     Math.round(parseInt(r) * 5 / 255).toString(),
@@ -46,12 +30,14 @@ const colors = {
     rgb256: rgb256,
     rgb256Hex: rgb256Hex
 };
+
 colorNames.forEach((colorName, i) => {
     colors.basic[colorName] = i;
     colors.bright[colorName] = i + 8;
 });
-for (let i = 1; i < 25; i++) {
-    colors.gray[i] = 231 + i;
+
+for (let i = 0; i < 24; i++) {
+    colors.gray[i] = 232 + i;
 }
 
 module.exports = colors;
