@@ -1,11 +1,16 @@
 'use strict';
 
-const t = require('../source/terminal-screen');
+const T = require('../source/terminal-screen');
 
-t.core.clear();
-t.core.move(5, 5);
-t.core.setBgColor(t.colors.basic.blue);
-t.core.setFgColor(t.colors.basic.green);
-t.core.write('qweqwe');
+T.core.clear();
+T.core.move(5, 5);
+//T.core.setBgColor(T.colors.basic.blue);
+//T.core.setFgColor(T.colors.basic.green);
+T.core.write('qweqwe ');
+T.core.enableStyles();
+T.core.write('qweqwe ');
+T.core.disableStyles();
+T.core.resetStyles();
+T.core.write('qweqwe ');
 //t.core.hideCursor();
 //t.core.showCursor();
