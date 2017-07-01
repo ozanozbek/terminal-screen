@@ -1,9 +1,11 @@
 'use strict';
 
-const T = require('../source/terminal-screen');
+const t = require('../source/terminal-screen');
 
-const t = new T();
-
-console.log(T.colors.rgb6(0, 2, 5));
-console.log(T.colors.rgb256(0, 127, 255));
-console.log(T.colors.rgb256Hex('#0077ff'));
+t.core.clear();
+t.core.move(5, 5);
+t.core.setBgColor(t.colors.basic.blue);
+t.core.setFgColor(t.colors.basic.green);
+t.core.write('qweqwe');
+//t.core.hideCursor();
+//t.core.showCursor();

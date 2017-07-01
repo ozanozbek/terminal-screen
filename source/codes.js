@@ -19,7 +19,7 @@ const codes = {
         bg: function(color) {
             return '48;5;' + color + 'm';
         },
-        fg: function(id) {
+        fg: function(color) {
             return '38;5;' + color + 'm';
         }
     },
