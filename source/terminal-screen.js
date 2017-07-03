@@ -62,6 +62,8 @@ const TerminalScreen = class {
     
     clear() {
         this.stream.write(this.writer.clear());
+        this.state.x = 0;
+        this.state.y = 0;
     }
     
     move(x, y) {
