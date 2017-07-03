@@ -32,7 +32,7 @@ const codes = {
         italic: ['23m', '3m'],
         underline: ['24m', '4m'],
         blink: ['25m', '5m'],
-        reverse: ['27m', '7m'],
+        inverse: ['27m', '7m'],
         hidden: ['28m', '8m'],
         strikethrough: ['29m', '9m']
     }
