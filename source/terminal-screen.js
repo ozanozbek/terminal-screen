@@ -4,6 +4,8 @@ const colors = require('./colors');
 const codes = require('./codes');
 const writer = require('./writer');
 
+// todo: scroll, lock
+
 const TerminalScreen = class {
     static get colors() { return colors; }
     static get codes() { return codes; }
