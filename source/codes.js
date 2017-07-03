@@ -2,6 +2,9 @@
 
 const codes = {
     escape: '\x1b[',
+    reset: '0m',
+    resetBgColor: '49m',
+    resetFgColor: '39m',
     screen: {
         clear: '0J'
     },
@@ -24,7 +27,6 @@ const codes = {
         }
     },
     styles: {
-        reset: '0m',
         bold: ['21m', '1m'],
         dim: ['22m', '2m'],
         italic: ['23m', '3m'],

@@ -24,6 +24,12 @@ const core = {
     setFgColor: (color = '7', stream = ds) => {
         core._write(codes.color.fg(color), undefined, stream);
     },
+    resetBgColor: (stream = ds) => {
+        core._write(codes.resetBgColor, undefined, stream);
+    },
+    resetFgColor: (stream = ds) => {
+        core._write(codes.resetFgColor, undefined, stream);
+    },
     hideCursor: (stream = ds) => {
         core._write(codes.cursor.hide, undefined, stream);
     },
@@ -52,8 +58,8 @@ const core = {
             }
         }
     },
-    resetStyles: (stream = ds) => {
-        core._write(codes.styles.reset, undefined, stream);
+    reset: (stream = ds) => {
+        core._write(codes.reset, undefined, stream);
     }
 };
 
