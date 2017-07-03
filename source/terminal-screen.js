@@ -111,7 +111,7 @@ const TerminalScreen = class {
             this.state.cursor = true;
         }
     }
-    enableStyles(styleList, force = false, _disable = false) {
+    enableStyles(styleList = [], force = false, _disable = false) {
         styleList = (typeof styleList === 'string') ? [styleList] : styleList;
         styleList = styleList.filter(
             (style) => 
@@ -122,7 +122,7 @@ const TerminalScreen = class {
             this.state.styles[style] = _disable ? false : true;
         });
     }
-    disableStyles(styleList, force) {
+    disableStyles(styleList = [], force = false) {
         this.enableStyles(styleList, force, true);
     }
     setStyles(styles, force = false) {
