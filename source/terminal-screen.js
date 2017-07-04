@@ -27,21 +27,6 @@ const TerminalScreen = class {
         this.setEncoding(encoding);
     }
     
-    setStream(stream = process.stdout, _applyEncoding = true) {
-        this.stream = stream;
-        this.width = this.stream.columns;
-        this.height = this.stream.rows;
-        this._resetState();
-        if (_applyEncoding) {
-            this._applyEncoding();
-        }
-    }
-    
-    setEncoding(encoding = 'utf8') {
-        this.encoding = encoding;
-        this._applyEncoding();
-    }
-    
     _applyEncoding() {
         if (this.stream && this.encoding) {
             this.stream.setDefaultEncoding(this.encoding);
@@ -60,6 +45,21 @@ const TerminalScreen = class {
         Object.keys(codes.styles).forEach((style) => {
             this.state.styles[style] = undefined;
         });
+    }
+    
+    setStream(stream = process.stdout, _applyEncoding = true) {
+        this.stream = stream;
+        this.width = this.stream.columns;
+        this.height = this.stream.rows;
+        this._resetState();
+        if (_applyEncoding) {
+            this._applyEncoding();
+        }
+    }
+    
+    setEncoding(encoding = 'utf8') {
+        this.encoding = encoding;
+        this._applyEncoding();
     }
     
     clear() {
