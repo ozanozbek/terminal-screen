@@ -16,35 +16,30 @@ const TerminalScreen = class {
         this.codes = codes;
         this.writer = writer;
         
-        this._stream = undefined;
-        this._encoding = undefined;
+        this.stream = undefined;
+        this.encoding = undefined;
+        
         this.width = undefined;
         this.height = undefined;
         this.state = {};
         
+        this.setStream(stream, false);
+        this.setEncoding(encoding);
+    }
+    
+    setStream(stream = process.stdout, _applyEncoding = true) {
         this.stream = stream;
-        this.encoding = encoding;
-    }
-    
-    set stream(stream = process.stdout) {
-        this._stream = stream;
-        this.width = this._stream.columns;
-        this.height = this._stream.rows;
-        this._applyEncoding();
+        this.width = this.stream.columns;
+        this.height = this.stream.rows;
         this._resetState();
+        if (_applyEncoding) {
+            this._applyEncoding();
+        }
     }
     
-    get stream() {
-        return this._stream;
-    }
-    
-    set encoding(encoding = 'utf8') {
-        this._encoding = encoding;
+    setEncoding(encoding = 'utf8') {
+        this.encoding = encoding;
         this._applyEncoding();
-    }
-    
-    get encoding() {
-        return this._encoding;
     }
     
     _applyEncoding() {
