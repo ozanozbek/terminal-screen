@@ -13,6 +13,7 @@ const writer = {
         return writer._output(codes.cursor.move(x, y));
     },
     write: (text = '') => {
+        text = String(text);
         return writer._output(text, true);
     },
     setBgColor: (color = '0') => {

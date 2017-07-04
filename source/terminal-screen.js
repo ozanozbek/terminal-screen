@@ -18,6 +18,7 @@ const TerminalScreen = class {
         
         this.stream = undefined;
         this.encoding = undefined;
+        this.wrap = false;
         
         this.width = undefined;
         this.height = undefined;
@@ -62,6 +63,10 @@ const TerminalScreen = class {
         this._applyEncoding();
     }
     
+    setWrap(wrap = false) {
+        this.wrap = Boolean(wrap);
+    }
+    
     clear() {
         this.stream.write(this.writer.clear());
         this.state.x = 0;
@@ -76,7 +81,11 @@ const TerminalScreen = class {
         this.state.y = y;
     }
     
-    write(text) {
+    write(text = '') {
+        text = String(text);
+        text = this.wrap ?
+            text :
+            text.slice(0, this.state.x + text.length - this.width);
         this.stream.write(this.writer.write(text));
         // update cursor position state
     }
