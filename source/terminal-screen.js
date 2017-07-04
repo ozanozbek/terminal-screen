@@ -16,14 +16,35 @@ const TerminalScreen = class {
         this.codes = codes;
         this.writer = writer;
         
-        this.stream = undefined;
-        this.encoding = undefined;
+        this._stream = undefined;
+        this._encoding = undefined;
         this.width = undefined;
         this.height = undefined;
         this.state = {};
         
-        this.setStream(stream);
-        this.setEncoding(encoding);
+        this.stream = stream;
+        this.encoding = encoding;
+    }
+    
+    set stream(stream = process.stdout) {
+        this._stream = stream;
+        this.width = this._stream.columns;
+        this.height = this._stream.rows;
+        this._applyEncoding();
+        this._resetState();
+    }
+    
+    get stream() {
+        return this._stream;
+    }
+    
+    set encoding(encoding = 'utf8') {
+        this._encoding = encoding;
+        this._applyEncoding();
+    }
+    
+    get encoding() {
+        return this._encoding;
     }
     
     _applyEncoding() {
@@ -43,21 +64,7 @@ const TerminalScreen = class {
         };
         Object.keys(codes.styles).forEach((style) => {
             this.state.styles[style] = undefined;
-        })
-    }
-    
-    // change to es6 setter getter?
-    setStream(stream = process.stdout) {
-        this.stream = stream;
-        this.width = this.stream.columns;
-        this.height = this.stream.rows;
-        this._applyEncoding();
-        this._resetState();
-    }
-    
-    setEncoding(encoding = 'utf8') {
-        this.encoding = encoding;
-        this._applyEncoding();
+        });
     }
     
     clear() {
