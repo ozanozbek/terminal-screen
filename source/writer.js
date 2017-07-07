@@ -6,6 +6,9 @@ const writer = {
     _output: (text = '', unescaped = false) => {
         return unescaped ? text : codes.escape + text;
     },
+    queryPosition: () => {
+        return writer._output(codes.queryPosition);
+    },
     clear: () => {
         return writer.move(0, 0) + writer._output(codes.screen.clear);
     },

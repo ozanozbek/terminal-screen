@@ -2,6 +2,7 @@
 
 const codes = {
     escape: '\x1b[',
+    queryPosition: '6n',
     reset: '0m',
     resetBgColor: '49m',
     resetFgColor: '39m',

@@ -4,9 +4,12 @@ const T = require('../source/terminal-screen');
 
 const t = new T();
 
-console.log(t.width);
+t.width = 10;
+t.height = 10;
 
-t.setWrap(false);
+t.setWrap(true);
 t.clear();
-t.move(50, 5);
-t.write(12345);
+t.move(5, 9);
+t.write(1234567890);
+
+console.log('--', t.state.x, t.state.y);

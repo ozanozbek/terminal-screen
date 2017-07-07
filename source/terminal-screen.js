@@ -4,8 +4,6 @@ const colors = require('./colors');
 const codes = require('./codes');
 const writer = require('./writer');
 
-// todo: scroll, lock
-
 const TerminalScreen = class {
     static get colors() { return colors; }
     static get codes() { return codes; }
@@ -18,7 +16,8 @@ const TerminalScreen = class {
         
         this.stream = undefined;
         this.encoding = undefined;
-        this.wrap = false;
+        this.wrap = true;
+        this.scroll = true;
         
         this.width = undefined;
         this.height = undefined;
@@ -63,8 +62,12 @@ const TerminalScreen = class {
         this._applyEncoding();
     }
     
-    setWrap(wrap = false) {
+    setWrap(wrap = true) {
         this.wrap = Boolean(wrap);
+    }
+    
+    setScroll(scroll = true) {
+        this.scroll = Boolean(scroll);
     }
     
     clear() {
@@ -82,12 +85,25 @@ const TerminalScreen = class {
     }
     
     write(text = '') {
+        // todo: optimize
         text = String(text);
-        text = this.wrap ?
-            text :
-            text.slice(0, this.state.x + text.length - this.width);
-        this.stream.write(this.writer.write(text));
-        // update cursor position state
+        if (text.length) {
+            this.stream.write(this.writer.write(text[0]));
+            this.state.x++;
+            if (this.state.x >= this.width) {
+                if (this.wrap) {
+                    this.state.x = 0;
+                    this.state.y++;
+                    if (this.state.y >= this.height) {
+                        this.state.y = this.height - 1;
+                    }
+                } else {
+                    this.move(this.width - 1);
+                }
+            } else {
+                this.write(text.slice(1));
+            }
+        }
     }
     
     setBgColor(color, force = false) {
