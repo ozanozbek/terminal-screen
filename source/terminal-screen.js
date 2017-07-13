@@ -88,20 +88,35 @@ const TerminalScreen = class {
         // todo: optimize
         text = String(text);
         if (text.length) {
-            this.stream.write(this.writer.write(text[0]));
-            this.state.x++;
-            if (this.state.x >= this.width) {
-                if (this.wrap) {
-                    this.state.x = 0;
-                    this.state.y++;
-                    if (this.state.y >= this.height) {
-                        this.state.y = this.height - 1;
+            const widthLeft = this.width - this.state.x;
+            const heightLeft = this.height - this.state.y;
+            const needsWrap = text.length >= widthLeft;
+            const needsScroll = needsWrap & (Math.ceil((text.length - widthLeft) / this.width) >= heightLeft);
+            if (needsWrap) {
+                if (needsScroll) {
+                    if (this.wrap) {
+                        if (this.scroll) {
+                            // 6
+                        } else {
+                            // 5
+                        }
+                    } else {
+                        // 4
                     }
                 } else {
-                    this.move(this.width - 1);
+                    if (this.wrap) {
+                        // 3
+                    } else {
+                        // 2
+                        text = text.slice(0, widthLeft);
+                        this.stream.write(this.writer.write(text));
+                        this.state.x += text.length;
+                    }
                 }
             } else {
-                this.write(text.slice(1));
+                // 1
+                this.stream.write(this.writer.write(text));
+                this.state.x += text.length;
             }
         }
     }
