@@ -17,7 +17,6 @@ const TerminalScreen = class {
         this.stream = undefined;
         this.encoding = undefined;
         this.wrap = true;
-        this.scroll = true;
         
         this.width = undefined;
         this.height = undefined;
@@ -66,10 +65,6 @@ const TerminalScreen = class {
         this.wrap = Boolean(wrap);
     }
     
-    setScroll(scroll = true) {
-        this.scroll = Boolean(scroll);
-    }
-    
     clear() {
         this.stream.write(this.writer.clear());
         this.state.x = 0;
@@ -85,24 +80,17 @@ const TerminalScreen = class {
     }
     
     write(text = '') {
-        // todo: optimize
+        // todo: fix
         text = String(text);
         if (text.length) {
             const widthLeft = this.width - this.state.x;
             const heightLeft = this.height - this.state.y;
             const needsWrap = text.length >= widthLeft;
-            const needsScroll = needsWrap & (Math.ceil((text.length - widthLeft) / this.width) >= heightLeft);
             if (needsWrap) {
-                if (needsScroll) {
-                    if (this.wrap) {
-                        if (this.scroll) {
-                            // 6
-                        } else {
-                            // 5
-                        }
-                    } else {
-                        // 4
-                    }
+                if (this.wrap) {
+                    //
+                } else {
+                    //
                 } else {
                     if (this.wrap) {
                         // 3
