@@ -43,7 +43,7 @@ const TerminalScreen = class {
       this.state.styles[style] = undefined;
     });
   }
-  _writeChar(char) {
+  _writeChar(char = ' ') {
     if (this.state.x < this.width) {
       this.stream.write(this.writer.write(char));
       this.state.x++;
@@ -55,6 +55,17 @@ const TerminalScreen = class {
       return true;
     }
     return false;
+  }
+  setOptions(options = {}, force = false) {
+    Object.keys(options).forEach(key => {
+      if (key === 'styles') {
+        this.disableStyles(Object.keys(this.codes.styles), force);
+      }
+      if (Object.keys(this.state).includes(key)) {
+        let fn = this['set' + key.charAt(0).toUpperCase() + key.slice(1)];
+        fn.apply(this, [options[key], force]);
+      }
+    });
   }
   setStream(stream = process.stdout, _applyEncoding = true) {
     this.stream = stream;
@@ -77,12 +88,18 @@ const TerminalScreen = class {
     this.state.x = 0;
     this.state.y = 0;
   }
-  setPosition(x, y) {
+  setPosition(x = 0, y = 0) {
     x = Math.min(x, this.width);
     y = Math.min(y, this.height);
     this.stream.write(this.writer.setPosition(x, y));
     this.state.x = x;
     this.state.y = y;
+  }
+  setX(x = 0) {
+    this.setPosition(x, this.state.y);
+  }
+  setY(y = 0) {
+    this.setPosition(this.state.x, y);
   }
   setBgColor(color, force = false) {
     if (force || this.state.bgColor !== color) {
@@ -118,7 +135,7 @@ const TerminalScreen = class {
       this.state.cursor = state;
     }
   }
-  setStyles(styles, force = false) {
+  setStyles(styles = {}, force = false) {
     if (!force) {
       styles = Object.keys(styles).filter(
         style => this.state.styles[style] !== styles[style]
@@ -147,15 +164,22 @@ const TerminalScreen = class {
     this.setCursor(true);
     this._resetState(true);
   }
-  write(text = '') {
+  write(text = ' ') {
     const chars = String(text).split('');
     let status = true;
     while (status && chars.length) {
       status = this._writeChar(chars.shift());
     }
   }
-  w(text, options, revert = false, force = false) {
-  //TODO
+  w(text = ' ', options = {}, revert = false, force = false) {
+    if (revert) {
+      const current = Object.assign({}, this.state);
+    }
+    this.setOptions(options, force);
+    this.write(text);
+    if (revert) {
+      this.setOptions(current, force);
+    }
   }
 };
 
