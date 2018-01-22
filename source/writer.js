@@ -7,9 +7,9 @@ const writer = {
         return unescaped ? text : codes.escape + text;
     },
     clear: () => {
-        return writer.move(0, 0) + writer._output(codes.screen.clear);
+        return writer.setPosition(0, 0) + writer._output(codes.screen.clear);
     },
-    move: (x = 0, y = 0) => {
+    setPosition: (x = 0, y = 0) => {
         return writer._output(codes.cursor.move(x, y));
     },
     write: (text = '') => {

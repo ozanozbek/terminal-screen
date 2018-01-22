@@ -74,13 +74,9 @@ const TerminalScreen = class {
     setPosition(x, y) {
         x = Math.min(x, this.width);
         y = Math.min(y, this.height);
-        this.stream.write(this.writer.move(x, y));
+        this.stream.write(this.writer.setPosition(x, y));
         this.state.x = x;
         this.state.y = y;
-    }
-
-    move(x, y) {
-        this.setPosition(x, y);
     }
     
     setBgColor(color, force = false) {
@@ -109,32 +105,13 @@ const TerminalScreen = class {
     }
     setCursor(state = true, force = false) {
         if (force || state !== this.state.cursor) {
-            this.stream.write(state
+            this.stream.write(
+                state
                 ? this.writer.showCursor()
                 : this.writer.hideCursor()
             );
             this.state.cursor = state;
         }
-    }
-    hideCursor(force = false) {
-        this.setCursor(false, force);
-    }
-    showCursor(force = false) {
-        this.setCursor(true, force);
-    }
-    enableStyles(styleList = [], force = false, _disable = false) {
-        styleList = (typeof styleList === 'string') ? [styleList] : styleList;
-        styleList = styleList.filter(
-            (style) => 
-                force || this.state.styles[style] !== (_disable ? false : true)
-        );
-        this.stream.write(this.writer.enableStyles(styleList));
-        styleList.forEach((style) => {
-            this.state.styles[style] = _disable ? false : true;
-        });
-    }
-    disableStyles(styleList = [], force = false) {
-        this.enableStyles(styleList, force, true);
     }
     setStyles(styles, force = false) {
         if (!force) {
@@ -150,18 +127,29 @@ const TerminalScreen = class {
             this.state.styles[style] = styles[style];
         }
     }
+    enableStyles(styleList = [], force = false, _disable = false) {
+        styleList = (typeof styleList === 'string') ? [styleList] : styleList;
+        this.setStyles(styleList.reduce((newStyles, style) => {
+            newStyles[style] = _disable ? false : true;
+            return newStyles;
+        }, {}))
+    }
+    disableStyles(styleList = [], force = false) {
+        this.enableStyles(styleList, force, true);
+    }
     reset() {
         this.stream.write(this.writer.reset());
+        this.setCursor(true);
         this._resetState(true);
     }
     write(text = '') {
         const chars = String(text).split('');
         let status = true;
         while (status && chars.length) {
-            status = this._write(chars.shift());
+            status = this._writeChar(chars.shift());
         }
     }
-    _write(char) {
+    _writeChar(char) {
         if (this.state.x < this.width) {
             this.stream.write(this.writer.write(char));
             this.state.x++;
