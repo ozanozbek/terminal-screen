@@ -6,9 +6,6 @@ const writer = {
     _output: (text = '', unescaped = false) => {
         return unescaped ? text : codes.escape + text;
     },
-    queryPosition: () => {
-        return writer._output(codes.queryPosition);
-    },
     clear: () => {
         return writer.move(0, 0) + writer._output(codes.screen.clear);
     },
@@ -19,10 +16,10 @@ const writer = {
         text = String(text);
         return writer._output(text, true);
     },
-    setBgColor: (color = '0') => {
+    setBgColor: (color) => {
         return writer._output(codes.color.bg(color));
     },
-    setFgColor: (color = '7') => {
+    setFgColor: (color) => {
         return writer._output(codes.color.fg(color));
     },
     resetBgColor: () => {
@@ -37,7 +34,7 @@ const writer = {
     showCursor: () => {
         return writer._output(codes.cursor.show);
     },
-    enableStyles: (styleList = ['bold'], _disable = false) => {
+    enableStyles: (styleList = [], _disable = false) => {
         styleList = (typeof styleList === 'string') ? [styleList] : styleList;
         const styles = {};
         styleList.forEach((style) => {
@@ -45,10 +42,10 @@ const writer = {
         });
         return writer.setStyles(styles);
     },
-    disableStyles: (styleList = ['bold']) => {
+    disableStyles: (styleList = []) => {
         return writer.enableStyles(styleList, true);
     },
-    setStyles: (styles = {bold: true}) => {
+    setStyles: (styles = {}) => {
         let result = '';
         for(const style in styles) {
             if (Object.keys(codes.styles).includes(style)) {

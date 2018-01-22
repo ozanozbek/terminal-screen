@@ -70,43 +70,17 @@ const TerminalScreen = class {
         this.state.x = 0;
         this.state.y = 0;
     }
-    
-    move(x, y) {
+
+    setPosition(x, y) {
         x = Math.min(x, this.width);
         y = Math.min(y, this.height);
         this.stream.write(this.writer.move(x, y));
         this.state.x = x;
         this.state.y = y;
     }
-    
-    write(text = '') {
-        // todo: fix
-        text = String(text);
-        if (text.length) {
-            const widthLeft = this.width - this.state.x;
-            const heightLeft = this.height - this.state.y;
-            const needsWrap = text.length >= widthLeft;
-            if (needsWrap) {
-                if (this.wrap) {
-                    //
-                } else {
-                    //
-                } else {
-                    if (this.wrap) {
-                        // 3
-                    } else {
-                        // 2
-                        text = text.slice(0, widthLeft);
-                        this.stream.write(this.writer.write(text));
-                        this.state.x += text.length;
-                    }
-                }
-            } else {
-                // 1
-                this.stream.write(this.writer.write(text));
-                this.state.x += text.length;
-            }
-        }
+
+    move(x, y) {
+        this.setPosition(x, y);
     }
     
     setBgColor(color, force = false) {
@@ -133,17 +107,20 @@ const TerminalScreen = class {
             this.state.fgColor = undefined;
         }
     }
-    hideCursor(force = false) {
-        if (force || this.state.cursor) {
-            this.stream.write(this.writer.hideCursor());
-            this.state.cursor = false;
+    setCursor(state = true, force = false) {
+        if (force || state !== this.state.cursor) {
+            this.stream.write(state
+                ? this.writer.showCursor()
+                : this.writer.hideCursor()
+            );
+            this.state.cursor = state;
         }
     }
+    hideCursor(force = false) {
+        this.setCursor(false, force);
+    }
     showCursor(force = false) {
-        if (force || !this.state.cursor) {
-            this.stream.write(this.writer.hideCursor());
-            this.state.cursor = true;
-        }
+        this.setCursor(true, force);
     }
     enableStyles(styleList = [], force = false, _disable = false) {
         styleList = (typeof styleList === 'string') ? [styleList] : styleList;
@@ -161,11 +138,12 @@ const TerminalScreen = class {
     }
     setStyles(styles, force = false) {
         if (!force) {
-            styles = Object.keys(styles).reduce(
-                (list, style) => this.state.styles[style] !== styles[style]
-            ).reduce(
-                (_styles, style) => _styles[style] = styles[style],
-            {});
+            styles = Object.keys(styles).filter(
+                style => this.state.styles[style] !== styles[style]
+            ).reduce((newStyles, style) => {
+                newStyles[style] = styles[style];
+                return newStyles;
+            }, {});
         }
         this.stream.write(this.writer.setStyles(styles));
         for (const style in this.state.styles) {
@@ -175,6 +153,29 @@ const TerminalScreen = class {
     reset() {
         this.stream.write(this.writer.reset());
         this._resetState(true);
+    }
+    write(text = '') {
+        const chars = String(text).split('');
+        let status = true;
+        while (status && chars.length) {
+            status = this._write(chars.shift());
+        }
+    }
+    _write(char) {
+        if (this.state.x < this.width) {
+            this.stream.write(this.writer.write(char));
+            this.state.x++;
+            return true;
+        } else if (this.wrap && this.state.y < this.height - 1) {
+            this.stream.write(this.writer.write(char));
+            this.state.y++;
+            this.state.x = 0;
+            return true;
+        }
+        return false;
+    }
+    w(text, options, revert = false, force = false) {
+        //TODO
     }
 };
 
