@@ -16,7 +16,6 @@ const TerminalScreen = class {
 
     this.stream = undefined;
     this.encoding = undefined;
-    this.wrap = true;
 
     this.width = undefined;
     this.height = undefined;
@@ -36,6 +35,7 @@ const TerminalScreen = class {
       y: keepPosition ? this.state.y : undefined,
       bgColor: undefined,
       fgColor: undefined,
+      wrap: true,
       cursor: undefined,
       styles: {}
     };
@@ -48,24 +48,13 @@ const TerminalScreen = class {
       this.stream.write(this.writer.write(char));
       this.state.x++;
       return true;
-    } else if (this.wrap && this.state.y < this.height - 1) {
+    } else if (this.state.wrap && this.state.y < this.height - 1) {
       this.stream.write(this.writer.write(char));
       this.state.y++;
       this.state.x = 0;
       return true;
     }
     return false;
-  }
-  setOptions(options = {}, force = false) {
-    Object.keys(options).forEach(key => {
-      if (key === 'styles') {
-        this.disableStyles(Object.keys(this.codes.styles), force);
-      }
-      if (Object.keys(this.state).includes(key)) {
-        let fn = this['set' + key.charAt(0).toUpperCase() + key.slice(1)];
-        fn.apply(this, [options[key], force]);
-      }
-    });
   }
   setStream(stream = process.stdout, _applyEncoding = true) {
     this.stream = stream;
@@ -80,26 +69,34 @@ const TerminalScreen = class {
     this.encoding = encoding;
     this._applyEncoding();
   }
+  setOptions(options = {}, force = false) {
+    Object.keys(options).forEach(key => {
+      if (key === 'styles') {
+        this.disableStyles(Object.keys(this.codes.styles), force);
+      }
+      if (Object.keys(this.state).includes(key)) {
+        let fn = this['set' + key.charAt(0).toUpperCase() + key.slice(1)];
+        fn.apply(this, [options[key], force]);
+      }
+    });
+  }
   setWrap(wrap = true) {
-    this.wrap = Boolean(wrap);
+    this.state.wrap = Boolean(wrap);
   }
-  clear() {
-    this.stream.write(this.writer.clear());
-    this.state.x = 0;
-    this.state.y = 0;
-  }
-  setPosition(x = 0, y = 0) {
+  setPosition(x = 0, y = 0, force = false) {
     x = Math.min(x, this.width);
     y = Math.min(y, this.height);
-    this.stream.write(this.writer.setPosition(x, y));
-    this.state.x = x;
-    this.state.y = y;
+    if (force || x !== this.state.x || y !== this.state.y) {
+      this.stream.write(this.writer.setPosition(x, y));
+      this.state.x = x;
+      this.state.y = y;
+    }
   }
-  setX(x = 0) {
-    this.setPosition(x, this.state.y);
+  setX(x = 0, force = false) {
+    this.setPosition(x, this.state.y, force);
   }
-  setY(y = 0) {
-    this.setPosition(this.state.x, y);
+  setY(y = 0, force = false) {
+    this.setPosition(this.state.x, y, force);
   }
   setBgColor(color, force = false) {
     if (force || this.state.bgColor !== color) {
@@ -125,14 +122,14 @@ const TerminalScreen = class {
       this.state.fgColor = undefined;
     }
   }
-  setCursor(state = true, force = false) {
-    if (force || state !== this.state.cursor) {
+  setCursor(cursor = true, force = false) {
+    if (force || cursor !== this.state.cursor) {
       this.stream.write(
-        state
+        cursor
         ? this.writer.showCursor()
         : this.writer.hideCursor()
       );
-      this.state.cursor = state;
+      this.state.cursor = cursor;
     }
   }
   setStyles(styles = {}, force = false) {
@@ -163,6 +160,11 @@ const TerminalScreen = class {
     this.stream.write(this.writer.reset());
     this.setCursor(true);
     this._resetState(true);
+  }
+  clear() {
+    this.stream.write(this.writer.clear());
+    this.state.x = 0;
+    this.state.y = 0;
   }
   write(text = ' ') {
     const chars = String(text).split('');
