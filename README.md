@@ -17,12 +17,6 @@ terminal-screen is a terminal wrapper, providing easy access without ANSI codes 
 
 # []()
 
-### Status
-
-[![Build Status](https://travis-ci.org/eozan/terminal-screen.svg?branch=master)](https://travis-ci.org/eozan/terminal-screen)
-
-# []()
-
 ### Installation
 ```bash
 npm install --save terminal-screen
@@ -34,7 +28,7 @@ npm install --save terminal-screen
 ```javascript
 'use strict';
 
-const TerminalScreen = require('../src/terminal-screen');
+const TerminalScreen = require('terminal-screen');
 
 // initialize
 const t = new TerminalScreen();
@@ -46,11 +40,11 @@ t.clear();
 t.setCursor(false);
 
 // set background/foreground color
-t.setBgColor('magenta');
-t.setFgColor('451');
+t.setBgColor(t.colors.basic.magenta);
+t.setFgColor(t.colors.rgb6(4, 5, 1));
 
 // set styles
-t.setStyles(['bold', 'underline']);
+t.setStyles({bold: true, underline: true});
 
 // set position
 t.setPosition(10, 5);
@@ -61,7 +55,8 @@ t.write('Hello world!');
 // shortcut methods
 t.w('Goodbye world!', {
     x: 10, y: 7,
-    bgColor: 'white', fgColor: 'gray3',
+    bgColor: t.colors.basic.white,
+    fgColor: t.colors.gray[3],
     styles: ['strikethrough', 'dim'],
     wrap: true
 });
@@ -70,174 +65,175 @@ t.w('Goodbye world!', {
 # []()
 
 ### API
-#### Instance properties
-```javascript
-{
-    // All properties are read-only and should only be changed using setter methods.
-
-    codes:          {},              // Ansi code lookup table used for operations
-    stream:         process.stdout,  // Wrapped stream
-    width:          0,               // Width of stream
-    height:         0,               // Height of stream
-    options: {                       // Current options
-        encoding:   'utf8',
-        cursor:     true,
-        x:          0,
-        y:          0,
-        bgColor:    'black',
-        fgColor:    'white',
-        styles:     [],
-        wrap:       true,
-        scroll:     true,
-        lock:       false
-    }
-}
-```
 
 #### Instance methods
-```javascript
-class TerminalScreen {
-    constructor(
-        stream      /* WritableStream */        = process.stdout        // Stream to wrap
-    ) {}
-    
-    // All methods return instance for chaining.
-    
-    setStream(
-        stream      /* WritableStream */        = process.stdout,       // Stream to wrap
-        force       /* boolean */               = false                 // Force change
-    ) {/* Wraps given stream. */}
-    
-    setEncoding(
-        encoding    /* string */                = 'utf8',               // Encoding to set
-        force       /* boolean */               = false                 // Force change
-    ) {/* Sets encoding. */}
-    
-    setCursor(
-        cursor      /* boolean */               = true,                 // Cursor status
-        force       /* boolean */               = false                 // Force change
-    ) {/* Shows or hides cursor. */}
-    
-    setPosition(
-        x           /* number */                = 0,                    // Zero-indexed X coordinate
-        y           /* number */                = 0,                    // Zero-indexed Y coordinate
-        force       /* boolean */               = false                 // Force change
-    ) {/* Moves cursor to given position. */}
-    
-    setBgColor(
-        color       /* string */                = 'black',              // Color name
-        force       /* boolean */               = false                 // Force change
-    ) {/* Sets background color to given color. */}
-    
-    setFgColor(
-        color       /* string */                = 'white',              // Color name
-        force       /* boolean */               = false                 // Force change
-    ) {/* Sets foreground color to given color. */}
-    
-    setStyle(
-        style       /* string */                = undefined,            // Style name
-        value       /* boolean */               = true,                 // Style status
-        force       /* boolean */               = false                 // Force change
-    ) {/* Enables or disables given style. */}
-    
-    setStyles(
-        styles      /* Array */                 = [],                   // Array of style names
-        force       /* boolean */               = false                 // Force change
-    ) {/* Enables only given styles. */}
-    
-    setWrap(
-        wrap        /* boolean */               = true                  // wrap status
-    ) {/* Enables or disables wrapping text to next line. */}
-    
-    setScroll(
-        scroll      /* boolean */               = true                  // scroll status
-    ) {/* Enables or disables vertical scrolling screen when wrapping text. */}
-    
-    setLock(
-        lock        /* boolean */               = true                  // lock status
-    ) {/* Enables or disables locking cursor position. */}
-    
-    setOptions(
-        options     /* object */                = {},                   // Key/value pairs of objects
-                    /* Possible options:
-                        encoding, cursor, x, y,
-                        bgColor, fgColor, styles,
-                        wrap, scroll, lock
-                    */
-        force       /* boolean */               = false                 // Force change
-    ) {/* Sets multiple options at once. */}
-    
-    reset(
-        clear       /* boolean */               = false,                // Clears screen
-        color       /* string */                = 'black'               // Color name
-    ) {/* Resets all settings to defaults, moves cursor to top left, optionally clears screen. */}
-    
-    clear(
-        color       /* string */                = 'black'               // Color name
-    ) {/* Clears screen. */}
-    
-    write(
-        text        /* string */                = ''                    // Text to write
-    ) {/* Writes text on current position. */}
-    
-    w(
-        text        /* string */                = ''                    // Text to write,
-        options     /* object */                = {},                   // Key/value pairs of objects
-                    /* Possible options:
-                        encoding, cursor, x, y,
-                        bgColor, fgColor, styles,
-                        wrap, scroll, lock
-                    */,
-        revert      /* boolean */               = false,                // Reverts options back
-        force       /* boolean */               = false                 // Force change
-    ) {/* Shortcut method for changing options and writing text, optionally reverting changes. */}
-}
-```
+
+##### constructor(stream, encoding)
+
+Creates terminal-screen instance.
+
+* **stream**: WritableStream. Default: `process.stdout`
+* **encoding**: String. Default: `'utf8'`
+
+##### setStream(stream)
+
+Sets stream.
+
+* **stream**: WritableStream. Default: `process.stdout`
+
+##### setEncoding(encoding)
+
+Sets encoding.
+
+* **encoding**: String. Default: `'utf8'`
+
+##### setOptions(options, force)
+
+Sets multiple options at a time.
+
+* **options**: Object. Possible keys: `wrap`, `x`, `y`, `bgColor`, `fgColor`, `cursor`, `styles`
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setWrap(wrap)
+
+Enables/disables wrapping at the end of the line.
+
+* **wrap**: Boolean.
+
+##### setPosition(x, y, force)
+
+Sets cursor position.
+
+* **x**: Number. Default: `0`
+* **y**: Number. Default: `0`
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setX(x, force)
+
+Sets cursor x position.
+
+* **x**: Number. Default: `0`
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setY(y, force)
+
+Sets cursor y position.
+
+* **y**: Number. Default: `0`
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setBgColor(color, force)
+
+Sets background color. See [Colors](#colors) for more information.
+
+* **color**: Number.
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setFgColor(color, force)
+
+Sets foreground color. See [Colors](#colors) for more information.
+
+* **color**: Number.
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### resetBgColor(force)
+
+Resets background color to terminal default.
+
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### resetFgColor(force)
+
+Resets foreground color to terminal default.
+
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setCursor(cursor, force)
+
+Shows/hides cursor.
+
+* **cursor**: Boolean. Default: `true`
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### setStyles(styles, force)
+
+Enables/disables multiple styles at once. See [Styles](#styles) for more information.
+
+* **styles**: Object. Should be structured as {styleName: styleState}
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### enableStyles(styleList, force)
+
+Enables multiple styles at once. See [Styles](#styles) for more information.
+
+* **styleList**: Array. List of style names.
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### disableStyles(styleList, force)
+
+Disables multiple styles at once. See [Styles](#styles) for more information.
+
+* **styleList**: Array. List of style names.
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+##### reset()
+
+Resets terminal and instance state.
+
+##### clear()
+
+Clears terminal screen.
+
+##### write(text)
+
+Writes text on terminal screen.
+
+* **text**: String.
+
+##### w(text, options, revert, force)
+
+Shortcut method for changing options, writing text, and optionally revert options back.
+
+* **text**: String.
+* **options**: Object. See `setOptions` method.
+* **revert**: Boolean. Whether to revert options back after writing.
+* **force**: Boolean. Forces operation even if not needed. Default: `false`
+
+#### Instance properties
+
+##### stream
+##### encoding
+##### width
+##### height
+##### state
+
+#### Helper objects
+
+Helper objects can be accessed on either instance properties or class properties.
+
+##### writer
+##### colors
+##### codes
 
 # []()
 
 ### Colors
-Possible color values:
-```javascript
-[
-    /* basic (8) */     'black', 'red', 'green', 'yellow',
-                        'blue', 'magenta', 'cyan', 'white',
-
-    /* bright (8) */    'brightBlack', 'brightRed', 'brightGreen', 'brightYellow',
-                        'brightBlue', 'brightMagenta', 'brightCyan', 'brightWhite',
-
-    /* gray (24) */     'gray1', /* ... */ 'gray24',
-
-    /* rgb (216) */     '000', /* ... */ '555'
-]
-```
 
 Color availability and representations might differ between systems and configurations. For maximum compatibility, only **basic** and **bright** colors should be used.
 
-Even though there are 256 colors, it's not the usual 256 color space. On most systems, these color groups partially overlap with each other. (`'brightWhite'` == `'555'` == **#ffffff**)
-
-![terminal-screen colors](http://i.imgur.com/1IL56NZ.png)
+Even though there are 256 colors, it's not the usual 256 color space. On most systems, these color groups partially overlap with each other.
 
 # []()
 
 ### Styles
-Possible style values:
-```javascript
-[
-    'bold', 'italic', 'underline', 'blink',
-    'reverse', 'hidden', 'strikethrough'
-]
-```
 
-Style availability depends on system. For maximum compatibility, only `'bold'`, `'underline'` and `'reverse'` should be used. Combining multiple styles causes even more compatibility problems.
+Style availability depends on system. For maximum compatibility, only **bold**, **underline** and **reverse** should be used. Combining multiple styles causes even more compatibility problems.
 
 # []()
 
 ### Notes
 
-- Currently `wrap` and `scroll` options are in development and not working, and they are assumed `false` for write operations. They can still be set, but they will have no effect.
-
 # []()
 
 ### License
-[MIT](https://github.com/eozan/terminal-brush/blob/master/LICENSE)
+[MIT](https://github.com/ozanozbek/terminal-screen/blob/master/LICENSE)
