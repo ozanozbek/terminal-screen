@@ -66,154 +66,136 @@ t.w('Goodbye world!', {
 
 ### API
 
-#### Instance methods
+### Instance methods
 
-##### constructor(stream, encoding)
+#### constructor(stream, encoding)
 
-Creates terminal-screen instance.
+> Creates terminal-screen instance.
+> * **stream**: WritableStream. Default: `process.stdout`
+> * **encoding**: String. Default: `'utf8'`
 
-* **stream**: WritableStream. Default: `process.stdout`
-* **encoding**: String. Default: `'utf8'`
+#### setStream(stream)
 
-##### setStream(stream)
+> Sets stream.
+> * **stream**: WritableStream. Default: `process.stdout`
 
-Sets stream.
+#### setEncoding(encoding)
 
-* **stream**: WritableStream. Default: `process.stdout`
+> Sets encoding.
+> * **encoding**: String. Default: `'utf8'`
 
-##### setEncoding(encoding)
+#### setOptions(options, force)
 
-Sets encoding.
+> Sets multiple options at a time.
+> * **options**: Object. Possible keys: `wrap`, `x`, `y`, `bgColor`, `fgColor`, `cursor`, `styles`
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-* **encoding**: String. Default: `'utf8'`
+#### setWrap(wrap)
 
-##### setOptions(options, force)
+> Enables/disables wrapping at the end of the line.
+> * **wrap**: Boolean.
 
-Sets multiple options at a time.
+#### setPosition(x, y, force)
 
-* **options**: Object. Possible keys: `wrap`, `x`, `y`, `bgColor`, `fgColor`, `cursor`, `styles`
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+> Sets cursor position.
+> * **x**: Number. Default: `0`
+> * **y**: Number. Default: `0`
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-##### setWrap(wrap)
+#### setX(x, force)
 
-Enables/disables wrapping at the end of the line.
+> Sets cursor x position.
+> * **x**: Number. Default: `0`
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-* **wrap**: Boolean.
+#### setY(y, force)
 
-##### setPosition(x, y, force)
+> Sets cursor y position.
+> * **y**: Number. Default: `0`
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-Sets cursor position.
+#### setBgColor(color, force)
 
-* **x**: Number. Default: `0`
-* **y**: Number. Default: `0`
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+> Sets background color. See [Colors](#colors) for more information.
+> * **color**: Number.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-##### setX(x, force)
+#### setFgColor(color, force)
 
-Sets cursor x position.
+> Sets foreground color. See [Colors](#colors) for more information.
+> * **color**: Number.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-* **x**: Number. Default: `0`
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+#### resetBgColor(force)
 
-##### setY(y, force)
+> Resets background color to terminal default.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-Sets cursor y position.
+#### resetFgColor(force)
 
-* **y**: Number. Default: `0`
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+> Resets foreground color to terminal default.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-##### setBgColor(color, force)
+#### setCursor(cursor, force)
 
-Sets background color. See [Colors](#colors) for more information.
+> Shows/hides cursor.
+> * **cursor**: Boolean. Default: `true`
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-* **color**: Number.
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+#### setStyles(styles, force)
 
-##### setFgColor(color, force)
+> Enables/disables multiple styles at once. See [Styles](#styles) for more information.
+> * **styles**: Object. Should be structured as {styleName: styleState}
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-Sets foreground color. See [Colors](#colors) for more information.
+#### enableStyles(styleList, force)
 
-* **color**: Number.
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+> Enables multiple styles at once. See [Styles](#styles) for more information.
+> * **styleList**: Array. List of style names.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-##### resetBgColor(force)
+#### disableStyles(styleList, force)
 
-Resets background color to terminal default.
+> Disables multiple styles at once. See [Styles](#styles) for more information.
+> * **styleList**: Array. List of style names.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+#### reset()
 
-##### resetFgColor(force)
+> Resets terminal and instance state.
 
-Resets foreground color to terminal default.
+#### clear()
 
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+> Clears terminal screen.
 
-##### setCursor(cursor, force)
+#### write(text)
 
-Shows/hides cursor.
+> Writes text on terminal screen.
+> * **text**: String.
 
-* **cursor**: Boolean. Default: `true`
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+#### w(text, options, revert, force)
 
-##### setStyles(styles, force)
+> Shortcut method for changing options, writing text, and optionally revert options back.
+> * **text**: String.
+> * **options**: Object. See `setOptions` method.
+> * **revert**: Boolean. Whether to revert options back after writing.
+> * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-Enables/disables multiple styles at once. See [Styles](#styles) for more information.
+### Instance properties
 
-* **styles**: Object. Should be structured as {styleName: styleState}
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
+#### stream
+#### encoding
+#### width
+#### height
+#### state
 
-##### enableStyles(styleList, force)
-
-Enables multiple styles at once. See [Styles](#styles) for more information.
-
-* **styleList**: Array. List of style names.
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
-
-##### disableStyles(styleList, force)
-
-Disables multiple styles at once. See [Styles](#styles) for more information.
-
-* **styleList**: Array. List of style names.
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
-
-##### reset()
-
-Resets terminal and instance state.
-
-##### clear()
-
-Clears terminal screen.
-
-##### write(text)
-
-Writes text on terminal screen.
-
-* **text**: String.
-
-##### w(text, options, revert, force)
-
-Shortcut method for changing options, writing text, and optionally revert options back.
-
-* **text**: String.
-* **options**: Object. See `setOptions` method.
-* **revert**: Boolean. Whether to revert options back after writing.
-* **force**: Boolean. Forces operation even if not needed. Default: `false`
-
-#### Instance properties
-
-##### stream
-##### encoding
-##### width
-##### height
-##### state
-
-#### Helper objects
+### Helper objects
 
 Helper objects can be accessed on either instance properties or class properties.
 
-##### writer
-##### colors
-##### codes
+#### writer
+#### colors
+#### codes
 
 # []()
 
