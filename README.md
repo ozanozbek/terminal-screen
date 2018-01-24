@@ -148,19 +148,19 @@ t.w('Goodbye world!', {
 > Shortcut method for changing options, writing text, and optionally reverting options back.
 
 **Parameters**
-> * **stream**: WritableStream. Default: `process.stdout`
-> * **encoding**: String. Default: `'utf8'`
-> * **options**: Object. Possible keys: `wrap`, `x`, `y`, `bgColor`, `fgColor`, `cursor`, `styles`
-> * **wrap**: Boolean. Default: `true`
-> * **x**: Number. Default: `0`
-> * **y**: Number. Default: `0`
-> * **color**: Number.
-> * **cursor**: Boolean. Default: `true`
-> * **styles**: Object. Should be structured as {styleName: styleState}
-> * **styleList**: Array. List of style names.
-> * **text**: String.
-> * **revert**: Boolean. Whether to revert options back after writing. Default: `false`
-> * **force**: Boolean. Forces operation even if not needed. Default: `false`
+###### * **stream**: WritableStream. Default: `process.stdout`
+###### * **encoding**: String. Default: `'utf8'`
+###### * **options**: Object. Possible keys: `wrap`, `x`, `y`, `bgColor`, `fgColor`, `cursor`, `styles`
+###### * **wrap**: Boolean. Default: `true`
+###### * **x**: Number. Default: `0`
+###### * **y**: Number. Default: `0`
+###### * **color**: Number.
+###### * **cursor**: Boolean. Default: `true`
+###### * **styles**: Object. Should be structured as {styleName: styleState}
+###### * **styleList**: Array. List of style names.
+###### * **text**: String.
+###### * **revert**: Boolean. Whether to revert options back after writing. Default: `false`
+###### * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
 ### Instance properties
 
