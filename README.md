@@ -5,7 +5,6 @@
 [API](#api-) |
 [Colors](#colors-) |
 [Styles](#styles-) |
-[Notes](#notes-) |
 [License](#license-)
 
 terminal-screen is a terminal wrapper, providing easy access without ANSI codes or dirty details.
@@ -25,8 +24,6 @@ npm install --save terminal-screen
 
 ### Usage [^](#terminal-screen)
 ```javascript
-'use strict';
-
 const TerminalScreen = require('terminal-screen');
 
 // initialize
@@ -64,8 +61,6 @@ t.w('Goodbye world!', {
 # []()
 
 ### API [^](#terminal-screen)
-
-### Instance methods
 
 #### constructor(stream, encoding) [^](#api-)
 
@@ -180,22 +175,6 @@ t.w('Goodbye world!', {
 > * **revert**: Boolean. Whether to revert options back after writing. Default: `false`
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-### Instance properties
-
-#### stream
-#### encoding
-#### width
-#### height
-#### state
-
-### Helper objects
-
-Helper objects can be accessed on either instance properties or class properties.
-
-#### writer
-#### colors
-#### codes
-
 # []()
 
 ### Colors [^](#terminal-screen)
@@ -204,15 +183,63 @@ Color availability and representations might differ between systems and configur
 
 Even though there are 256 colors, it's not the usual 256 color space. On most systems, these color groups partially overlap with each other.
 
+While terminal-screen API accepts only color codes, `colors` object provides access to color codes in a user-friendly way. It can be accessed from class or instance:
+```javascript
+const TerminalScreen = require('terminal-screen');
+const colors = TerminalScreen.colors;
+// or
+const t = new TerminalScreen();
+const colors = t.colors;
+```
+`colors` object is structured as:
+```javascript
+const colors = {
+  basic: { /* black, red, green, yellow, blue, magenta, cyan, white */ },
+  bright: { /* black, red, green, yellow, blue, magenta, cyan, white */ },
+  gray: [/* 0, ..., 23 */]
+};
+```
+
+Also, it has a minimal API.
+
+#### Colors API [^](#colors-)
+
+##### rgb6(r, g, b)
+
+> Returns color code for given rgb values of 256 colors.
+> * **r**: Number. Must be in range 0 - 5. Default: `0`
+> * **g**: Number. Must be in range 0 - 5. Default: `0`
+> * **b**: Number. Must be in range 0 - 5. Default: `0`
+
+
+##### rgb256(r, g, b)
+
+> Returns closest color code for given rgb values of 16M colors.
+> * **r**: Number. Must be in range 0 - 255. Default: `0`
+> * **g**: Number. Must be in range 0 - 255. Default: `0`
+> * **b**: Number. Must be in range 0 - 255. Default: `0`
+
+##### rgb256Hex(hex)
+
+> Returns closest color code for given rgb values of 16M colors.
+> * **hex**: String. Must be hexadecimal RGB code. Default: `000000`
+
+#### Usage [^](#colors-)
+
+```javascript
+const TerminalScreen = require('terminal-screen');
+const t = new TerminalScreen();
+t.setBgColor(t.colors.basic.magenta);
+t.setFgColor(t.colors.rgb256Hex('#ff9900'));
+```
+
 # []()
 
 ### Styles [^](#terminal-screen)
 
-Style availability depends on system. For maximum compatibility, only **bold**, **underline** and **reverse** should be used. Combining multiple styles causes even more compatibility problems.
+Available styles: `'bold'`, `'dim'`, `'italic'`, `'underline'`, `'blink'`, `'inverse'`, `'hidden'`, `'strikethrough'`
 
-# []()
-
-### Notes [^](#terminal-screen)
+Style availability depends on system. For maximum compatibility, only **bold**, **underline** and **reverse** should be used.
 
 # []()
 
