@@ -1,13 +1,12 @@
 # terminal-screen
 
-[Status](#status) |
-[Installation](#installation) |
-[Usage](#usage) |
-[API](#API) |
-[Colors](#colors) |
-[Styles](#styles) |
-[Notes](#notes) |
-[License](#license)
+[Installation](#installation-) |
+[Usage](#usage-) |
+[API](#api-) |
+[Colors](#colors-) |
+[Styles](#styles-) |
+[Notes](#notes-) |
+[License](#license-)
 
 terminal-screen is a terminal wrapper, providing easy access without ANSI codes or dirty details.
 - Manages terminal states
@@ -68,112 +67,112 @@ t.w('Goodbye world!', {
 
 ### Instance methods
 
-#### constructor(stream, encoding) [^](#API)
+#### constructor(stream, encoding) [^](#api-)
 
 > Creates terminal-screen instance.
 > * **stream**: WritableStream. Default: `process.stdout`
 > * **encoding**: String. Default: `'utf8'`
 
-#### setStream(stream) [^](#API)
+#### setStream(stream) [^](#api-)
 
 > Sets stream.
 > * **stream**: WritableStream. Default: `process.stdout`
 
-#### setEncoding(encoding) [^](#API)
+#### setEncoding(encoding) [^](#api-)
 
 > Sets encoding.
 > * **encoding**: String. Default: `'utf8'`
 
-#### setOptions(options, force) [^](#API)
+#### setOptions(options, force) [^](#api-)
 
 > Sets multiple options at a time.
 > * **options**: Object. Possible keys: `wrap`, `x`, `y`, `bgColor`, `fgColor`, `cursor`, `styles`
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setWrap(wrap) [^](#API)
+#### setWrap(wrap) [^](#api-)
 
 > Enables/disables wrapping at the end of the line.
 > * **wrap**: Boolean. Default: `true`
 
-#### setPosition(x, y, force) [^](#API)
+#### setPosition(x, y, force) [^](#api-)
 
 > Sets cursor position.
 > * **x**: Number. Default: `0`
 > * **y**: Number. Default: `0`
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setX(x, force) [^](#API)
+#### setX(x, force) [^](#api-)
 
 > Sets cursor x position.
 > * **x**: Number. Default: `0`
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setY(y, force) [^](#API)
+#### setY(y, force) [^](#api-)
 
 > Sets cursor y position.
 > * **y**: Number. Default: `0`
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setBgColor(color, force) [^](#API)
+#### setBgColor(color, force) [^](#api-)
 
 > Sets background color. See [Colors](#colors) for more information.
 > * **color**: Number.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setFgColor(color, force) [^](#API)
+#### setFgColor(color, force) [^](#api-)
 
 > Sets foreground color. See [Colors](#colors) for more information.
 > * **color**: Number.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### resetBgColor(force) [^](#API)
+#### resetBgColor(force) [^](#api-)
 
 > Resets background color to terminal default.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### resetFgColor(force) [^](#API)
+#### resetFgColor(force) [^](#api-)
 
 > Resets foreground color to terminal default.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setCursor(cursor, force) [^](#API)
+#### setCursor(cursor, force) [^](#api-)
 
 > Shows/hides cursor.
 > * **cursor**: Boolean. Default: `true`
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### setStyles(styles, force) [^](#API)
+#### setStyles(styles, force) [^](#api-)
 
 > Enables/disables multiple styles at once. See [Styles](#styles) for more information.
 > * **styles**: Object. Should be structured as {styleName: styleState}
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### enableStyles(styleList, force) [^](#API)
+#### enableStyles(styleList, force) [^](#api-)
 
 > Enables multiple styles at once. See [Styles](#styles) for more information.
 > * **styleList**: Array. List of style names.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### disableStyles(styleList, force) [^](#API)
+#### disableStyles(styleList, force) [^](#api-)
 
 > Disables multiple styles at once. See [Styles](#styles) for more information.
 > * **styleList**: Array. List of style names.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
-#### reset() [^](#API)
+#### reset() [^](#api-)
 
 > Resets terminal and instance state.
 
-#### clear() [^](#API)
+#### clear() [^](#api-)
 
 > Clears terminal screen.
 
-#### write(text) [^](#API)
+#### write(text) [^](#api-)
 
 > Writes text on terminal screen.
 > * **text**: String.
 
-#### w(text, options, revert, force) [^](#API)
+#### w(text, options, revert, force) [^](#api-)
 
 > Shortcut method for changing options, writing text, and optionally reverting options back.
 > * **text**: String.
