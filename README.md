@@ -138,19 +138,19 @@ t.w('Goodbye world!', {
 
 #### setStyles(styles, force) [^](#api-)
 
-> Enables/disables multiple styles at once. See [Styles](#styles) for more information.
+> Enables/disables multiple styles at once. See [Styles](#styles-) for more information.
 > * **styles**: Object. Should be structured as {styleName: styleState}
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
 #### enableStyles(styleList, force) [^](#api-)
 
-> Enables multiple styles at once. See [Styles](#styles) for more information.
+> Enables multiple styles at once. See [Styles](#styles-) for more information.
 > * **styleList**: Array. List of style names.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
 #### disableStyles(styleList, force) [^](#api-)
 
-> Disables multiple styles at once. See [Styles](#styles) for more information.
+> Disables multiple styles at once. See [Styles](#styles-) for more information.
 > * **styleList**: Array. List of style names.
 > * **force**: Boolean. Forces operation even if not needed. Default: `false`
 
