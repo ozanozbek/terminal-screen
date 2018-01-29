@@ -57,7 +57,11 @@ t.w('Goodbye world!', {
     wrap: true
 });
 ```
+Also, run [examples/demo.js](examples/demo.js) to see a more colorful example:
 
+```bash
+node examples/demo.js
+```
 # []()
 
 ### API [^](#terminal-screen)
