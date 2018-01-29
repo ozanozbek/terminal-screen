@@ -46,5 +46,6 @@ const step = () => {
 let stepNum = 0;
 const intervalTime = 20;
 const t = new TerminalScreen();
+t.setCursor(false);
 t.clear();
 let interval = setInterval(step, intervalTime);
