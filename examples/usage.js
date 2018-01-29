@@ -1,6 +1,6 @@
 'use strict';
 
-const TerminalScreen = require('../src/terminal-screen');
+const TerminalScreen = require('../source/terminal-screen');
 
 // initialize
 const t = new TerminalScreen();
@@ -12,11 +12,11 @@ t.clear();
 t.setCursor(false);
 
 // set background/foreground color
-t.setBgColor('magenta');
-t.setFgColor('451');
+t.setBgColor(t.colors.basic.magenta);
+t.setFgColor(t.colors.rgb6(4, 5, 1));
 
 // set styles
-t.setStyles(['bold', 'underline']);
+t.setStyles({bold: true, underline: true});
 
 // set position
 t.setPosition(10, 5);
@@ -27,7 +27,8 @@ t.write('Hello world!');
 // shortcut methods
 t.w('Goodbye world!', {
     x: 10, y: 7,
-    bgColor: 'white', fgColor: 'gray3',
+    bgColor: t.colors.basic.white,
+    fgColor: t.colors.gray[3],
     styles: ['strikethrough', 'dim'],
     wrap: true
 });
