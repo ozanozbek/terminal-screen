@@ -44,8 +44,7 @@ const step = () => {
 };
 
 let stepNum = 0;
-const intervalTime = 10;
+const intervalTime = 20;
 const t = new TerminalScreen();
 t.clear();
-t.setCursor(false);
 let interval = setInterval(step, intervalTime);

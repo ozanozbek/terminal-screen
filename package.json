@@ -1,6 +1,6 @@
 {
   "name": "terminal-screen",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "terminal-screen is a terminal wrapper, providing easy access without ANSI codes or dirty details.",
   "main": "src/terminal-screen.js",
   "scripts": {},
