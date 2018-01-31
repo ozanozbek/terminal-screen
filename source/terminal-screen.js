@@ -58,6 +58,11 @@ const TerminalScreen = class {
   }
   clear() {
     this.terminalApi.clear();
+    this.pixels = [];
+    this.newPixels = [];
+  }
+  setCursor(cursor = true, force = false) {
+    this.terminalApi.setCursor(cursor, false);
   }
   setPixel(x, y, options) {
     options = {...Pixel.defaultOptions, ...options};
