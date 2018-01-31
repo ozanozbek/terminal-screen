@@ -1,6 +1,6 @@
 {
   "name": "terminal-screen",
-  "version": "0.2.9",
+  "version": "0.1.0",
   "description": "",
   "main": "",
   "scripts": {},
@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/ozanozbek/terminal-screen/issues"
   },
-  "homepage": "https://github.com/ozanozbek/terminal-screen"
+  "homepage": "https://github.com/ozanozbek/terminal-screen",
+  "dependencies": {
+    "terminal-api": "^0.1.3"
+  }
 }
