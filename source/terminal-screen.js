@@ -41,7 +41,7 @@ const TerminalScreen = class {
         this.pixels.push(newPixel);
       } else if (pixel.isDifferent(newPixel)) {
         this._renderPixel(newPixel);
-        pixel.options = {...newPixel.options};
+        pixel.setOptions(newPixel.options);
       }
     });
     this.newPixels = [];
