@@ -5,6 +5,8 @@ const TerminalApi = require('terminal-api');
 const Pixel = require('./pixel');
 
 const TerminalScreen = class {
+  static get TerminalApi() { return TerminalApi; }
+
   constructor(stream, encoding) {
     this.terminalApi = new TerminalApi(stream, encoding);
     this.intervalId = null;
@@ -18,10 +20,14 @@ const TerminalScreen = class {
     this.stepNum++;
   }
   _renderPixel(pixel) {
-    this.terminalApi.w(
-      pixel.options.char,
-      pixel.options
-    );
+    const char = pixel.options.char;
+    const options = {
+      x: pixel.x, y: pixel.y,
+      bgColor: pixel.options.bgColor,
+      fgColor: pixel.options.fgColor,
+      styles: pixel.options.styles
+    };
+    this.terminalApi.w(char, options);
   }
   render() {
     this.newPixels.forEach(newPixel => {
@@ -61,15 +67,17 @@ const TerminalScreen = class {
     this.pixels = [];
     this.newPixels = [];
   }
-  setCursor(cursor = true, force = false) {
+  setCursor(cursor = true) {
     this.terminalApi.setCursor(cursor, false);
   }
-  setPixel(x, y, options) {
+  setPixel(x = 0, y = 0, options) {
     options = {...Pixel.defaultOptions, ...options};
     let pixel = this.newPixels.find(
       pixel => pixel.x === x && pixel.y === y
     );
-    if (!pixel) {
+    if (pixel) {
+      pixel.setOptions(options);
+    } else {
       pixel = new Pixel(x, y, options);
       this.newPixels.push(pixel);
     }
