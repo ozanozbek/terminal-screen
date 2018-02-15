@@ -10,7 +10,7 @@ const TerminalScreen = class {
 
   constructor(stream, encoding) {
     this.terminalApi = new TerminalApi(stream, encoding);
-    this.colors = TerminalApi.colors;
+    this.colors = this.terminalApi.colors;
     this.intervalId = null;
     this.running = false;
     this.stepNum = 0;
@@ -30,6 +30,18 @@ const TerminalScreen = class {
       styles: pixel.options.styles
     };
     this.terminalApi.w(char, options);
+  }
+  get width() {
+    return this.terminalApi.width;
+  }
+  get height() {
+    return this.terminalApi.height;
+  }
+  setStream(stream) {
+    this.terminalApi.setStream(stream);
+  }
+  setEncoding(encoding) {
+    this.terminalApi.setEncoding(encoding);
   }
   render() {
     this.newPixels.forEach(newPixel => {
