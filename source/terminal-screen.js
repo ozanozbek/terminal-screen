@@ -1,7 +1,6 @@
 'use strict';
 
 const TerminalApi = require('terminal-api');
-
 const Pixel = require('./pixel');
 
 const TerminalScreen = class {
@@ -10,7 +9,7 @@ const TerminalScreen = class {
 
   constructor(stream, encoding) {
     this.terminalApi = new TerminalApi(stream, encoding);
-    this.colors = this.terminalApi.colors;
+    this.interval = 100;
     this.intervalId = null;
     this.running = false;
     this.stepNum = 0;
@@ -37,11 +36,21 @@ const TerminalScreen = class {
   get height() {
     return this.terminalApi.height;
   }
+  get colors() {
+    return this.terminalApi.colors;
+  }
   setStream(stream) {
     this.terminalApi.setStream(stream);
   }
   setEncoding(encoding) {
     this.terminalApi.setEncoding(encoding);
+  }
+  setInterval(interval = 100) {
+    this.interval = interval;
+    if (this.running) {
+      this.stop();
+      this.start(false);
+    }
   }
   render() {
     this.newPixels.forEach(newPixel => {
@@ -60,13 +69,15 @@ const TerminalScreen = class {
     });
     this.newPixels = [];
   }
-  start(interval = 100) {
+  start(reset = true) {
     if (!this.running) {
-      this.stepNum = 0;
+      if (reset) {
+        this.stepNum = 0;
+      }
       this.running = true;
       this.intervalId = setInterval(
         this._step.bind(this),
-        interval
+        this.interval
       );
     }
   }
