@@ -5,18 +5,24 @@ const colors = TerminalScreen.colors;
 
 const terminalScreen = new TerminalScreen();
 
-terminalScreen.clear();
 terminalScreen.start();
-terminalScreen.setPixel(0, 0, {
-  bgColor: colors.rgb256Hex('#ff9900'),
-  char: '*'
-});
 
-terminalScreen.setPixel(
-  terminalScreen.width - 1,
-  terminalScreen.height - 1,
-  {
-    bgColor: colors.rgb256Hex('#0044a0'),
+const draw = () => {
+  terminalScreen.clear();
+  terminalScreen.setPixel(0, 0, {
+    fgColor: colors.basic.green,
     char: '*'
-  }
-);
+  });
+
+  terminalScreen.setPixel(
+    terminalScreen.width - 1,
+    terminalScreen.height - 1,
+    {
+      fgColor: colors.basic.red,
+      char: '*'
+    }
+  );
+};
+
+terminalScreen.on('resize', draw);
+draw();

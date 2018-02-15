@@ -3,12 +3,9 @@
 const TerminalApi = require('terminal-api');
 const Pixel = require('./pixel');
 
-const TerminalScreen = class {
-  static get TerminalApi() { return TerminalApi; }
-  static get colors() { return TerminalApi.colors; }
-
+const TerminalScreen = class extends TerminalApi {
   constructor(stream, encoding) {
-    this.terminalApi = new TerminalApi(stream, encoding);
+    super(stream, encoding);
     this.interval = 100;
     this.intervalId = null;
     this.running = false;
@@ -28,22 +25,7 @@ const TerminalScreen = class {
       fgColor: pixel.options.fgColor,
       styles: pixel.options.styles
     };
-    this.terminalApi.w(char, options);
-  }
-  get width() {
-    return this.terminalApi.width;
-  }
-  get height() {
-    return this.terminalApi.height;
-  }
-  get colors() {
-    return this.terminalApi.colors;
-  }
-  setStream(stream) {
-    this.terminalApi.setStream(stream);
-  }
-  setEncoding(encoding) {
-    this.terminalApi.setEncoding(encoding);
+    this.w(char, options);
   }
   setInterval(interval = 100) {
     this.interval = interval;
@@ -88,12 +70,9 @@ const TerminalScreen = class {
     }
   }
   clear() {
-    this.terminalApi.clear();
+    super.clear();
     this.pixels = [];
     this.newPixels = [];
-  }
-  setCursor(cursor = true) {
-    this.terminalApi.setCursor(cursor, false);
   }
   setPixel(x = 0, y = 0, options) {
     options = {...Pixel.defaultOptions, ...options};
