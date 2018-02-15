@@ -1,28 +1,50 @@
 'use strict';
 
 const TerminalScreen = require('../source/terminal-screen');
-const colors = TerminalScreen.colors;
 
-const terminalScreen = new TerminalScreen();
+const getRandomNumber = (min = 0, max = 6) => (
+  Math.floor(Math.random() * max) + min
+);
 
-terminalScreen.start();
+const getRandomColor = () => TerminalScreen.colors.rgb6(
+  getRandomNumber(), getRandomNumber(), getRandomNumber()
+);
 
-const draw = () => {
-  terminalScreen.clear();
-  terminalScreen.setPixel(0, 0, {
-    fgColor: colors.basic.green,
-    char: '*'
-  });
+const getRandomGrayColor = () => TerminalScreen.colors.gray[
+  getRandomNumber(0, 24)
+];
 
-  terminalScreen.setPixel(
-    terminalScreen.width - 1,
-    terminalScreen.height - 1,
-    {
-      fgColor: colors.basic.red,
-      char: '*'
+const drawBorders = () => {
+  for (let y of [0, t.height - 1]) {
+    for (let x = 0; x < t.width; x++) {
+      t.setPixel(x, y, {char: '█', fgColor: getRandomColor()});
     }
-  );
+  }
+  for (let x of [0, t.width - 1]) {
+    for (let y = 1; y < t.height - 1; y++) {
+      t.setPixel(x, y, {char: '█', fgColor: getRandomColor()});
+    }
+  }
 };
 
-terminalScreen.on('resize', draw);
-draw();
+const writeTitle = (title) => {
+  title.split('').forEach((char, i) => {
+    t.setPixel(
+      (t.width / 2) - title.length + (i * 2),
+      t.height / 2,
+      {char: char, fgColor: t.colors.gray[23 - ((t.stepNum % 8) * 3)]}
+    );
+  });
+};
+
+const step = () => {
+  t.clear();
+  drawBorders();
+  writeTitle('terminal-screen');
+};
+
+const t = new TerminalScreen();
+t.setCursor(false);
+t.on('render', step);
+t.setIntervalTime(10000);
+t.start();

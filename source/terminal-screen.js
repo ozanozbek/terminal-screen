@@ -6,7 +6,7 @@ const Pixel = require('./pixel');
 const TerminalScreen = class extends TerminalApi {
   constructor(stream, encoding) {
     super(stream, encoding);
-    this.interval = 100;
+    this.intervalTime = 100;
     this.intervalId = null;
     this.running = false;
     this.stepNum = 0;
@@ -27,8 +27,8 @@ const TerminalScreen = class extends TerminalApi {
     };
     this.w(char, options);
   }
-  setInterval(interval = 100) {
-    this.interval = interval;
+  setIntervalTime(intervalTime = 100) {
+    this.intervalTime = intervalTime;
     if (this.running) {
       this.stop();
       this.start(false);
@@ -50,6 +50,7 @@ const TerminalScreen = class extends TerminalApi {
       }
     });
     this.newPixels = [];
+    this.emit('render', this.stepNum);
   }
   start(reset = true) {
     if (!this.running) {
