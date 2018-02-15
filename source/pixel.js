@@ -10,9 +10,9 @@ const defaultOptions = {
 const Pixel = class {
   static get defaultOptions() { return defaultOptions; }
 
-  constructor(x, y, options = defaultOptions) {
-    this.x = 0;
-    this.y = 0;
+  constructor(x = 0, y = 0, options = defaultOptions) {
+    this.x = x;
+    this.y = y;
     this.setOptions(options);
   }
   setOptions(options = defaultOptions) {

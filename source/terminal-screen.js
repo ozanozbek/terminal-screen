@@ -6,9 +6,11 @@ const Pixel = require('./pixel');
 
 const TerminalScreen = class {
   static get TerminalApi() { return TerminalApi; }
+  static get colors() { return TerminalApi.colors; }
 
   constructor(stream, encoding) {
     this.terminalApi = new TerminalApi(stream, encoding);
+    this.colors = TerminalApi.colors;
     this.intervalId = null;
     this.running = false;
     this.stepNum = 0;
