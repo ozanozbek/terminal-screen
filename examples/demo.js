@@ -37,14 +37,21 @@ const writeTitle = (title) => {
   });
 };
 
+const writeFps = () => {
+  `fps: ${t.fps}`.split('').forEach((char, i) => {
+    t.set(i + 1, 1, {char})
+  });
+};
+
 const step = (stepNum) => {
   drawBorders();
   writeTitle('terminal-screen');
+  writeFps();
 };
 
 const t = new TerminalScreen();
 t.setCursor(false);
 t.on('render', step);
-t.setIntervalTime(20);
+t.setFps(30);
 t.clear();
 t.start();

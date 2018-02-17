@@ -12,6 +12,9 @@ const TerminalScreen = class extends TerminalApi {
     this.stepNum = 0;
     this.pixels = new PixelCollection();
     this.newPixels = new PixelCollection();
+    this.oldTimeStamp = null;
+    this.newTimeStamp = null;
+    this.fps = 0;
   }
   _step() {
     this.render();
@@ -34,6 +37,9 @@ const TerminalScreen = class extends TerminalApi {
       this.start(false);
     }
   }
+  setFps(fps = 30) {
+    this.setIntervalTime(1000 / fps);
+  }
   render() {
     this.newPixels.forEach((newPixel, x, y) => {
       if (this.pixels.set(x, y, newPixel)) {
@@ -42,11 +48,19 @@ const TerminalScreen = class extends TerminalApi {
     });
     this.newPixels.empty();
     this.emit('render', this.stepNum);
+    this.newTimeStamp = new Date;
+    if (this.oldTimeStamp) {
+      this.fps = Math.round(1000 / (this.newTimeStamp - this.oldTimeStamp));
+    }
+    this.oldTimeStamp = this.newTimeStamp;
   }
   start(reset = true) {
     if (!this.running) {
       if (reset) {
         this.stepNum = 0;
+        this.fps = 0;
+        this.oldTimeStamp = null;
+        this.newTimeStamp = null;
       }
       this.running = true;
       this.intervalId = setInterval(
