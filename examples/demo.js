@@ -17,19 +17,19 @@ const getRandomGrayColor = () => TerminalScreen.colors.gray[
 const drawBorders = () => {
   for (let y of [0, t.height - 1]) {
     for (let x = 0; x < t.width; x++) {
-      t.setPixel(x, y, {char: '█', fgColor: getRandomColor()});
+      t.set(x, y, {char: '█', fgColor: getRandomColor()});
     }
   }
   for (let x of [0, t.width - 1]) {
     for (let y = 1; y < t.height - 1; y++) {
-      t.setPixel(x, y, {char: '█', fgColor: getRandomColor()});
+      t.set(x, y, {char: '█', fgColor: getRandomColor()});
     }
   }
 };
 
 const writeTitle = (title) => {
   title.split('').forEach((char, i) => {
-    t.setPixel(
+    t.set(
       (t.width / 2) - title.length + (i * 2),
       t.height / 2,
       {char: char, fgColor: t.colors.gray[23 - ((t.stepNum % 8) * 3)]}

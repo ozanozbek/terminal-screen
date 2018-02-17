@@ -1,7 +1,7 @@
 'use strict';
 
 const TerminalApi = require('terminal-api');
-const Pixel = require('./pixel');
+const PixelCollection = require('./pixel-collection');
 
 const TerminalScreen = class extends TerminalApi {
   constructor(stream, encoding) {
@@ -10,17 +10,17 @@ const TerminalScreen = class extends TerminalApi {
     this.intervalId = null;
     this.running = false;
     this.stepNum = 0;
-    this.pixels = [];
-    this.newPixels = [];
+    this.pixels = new PixelCollection();
+    this.newPixels = new PixelCollection();
   }
   _step() {
     this.render();
     this.stepNum++;
   }
-  _renderPixel(pixel) {
+  _renderPixel(x, y, pixel) {
     const char = pixel.options.char;
     const options = {
-      x: pixel.x, y: pixel.y,
+      x, y,
       bgColor: pixel.options.bgColor,
       fgColor: pixel.options.fgColor,
       styles: pixel.options.styles
@@ -35,21 +35,12 @@ const TerminalScreen = class extends TerminalApi {
     }
   }
   render() {
-    this.newPixels.forEach(newPixel => {
-      let pixel = this.pixels.find(
-        pixel => 
-          pixel.x === newPixel.x
-          && pixel.y === newPixel.y
-      );
-      if (!pixel) {
-        this._renderPixel(newPixel);
-        this.pixels.push(newPixel);
-      } else if (pixel.isDifferent(newPixel)) {
-        this._renderPixel(newPixel);
-        pixel.setOptions(newPixel.options);
+    this.newPixels.forEach((newPixel, x, y) => {
+      if (this.pixels.set(x, y, newPixel)) {
+        this._renderPixel(x, y, newPixel);
       }
     });
-    this.newPixels = [];
+    this.newPixels.empty();
     this.emit('render', this.stepNum);
   }
   start(reset = true) {
@@ -72,21 +63,15 @@ const TerminalScreen = class extends TerminalApi {
   }
   clear() {
     super.clear();
-    this.pixels = [];
-    this.newPixels = [];
+    this.pixels.empty();
+    this.newPixels.empty();
   }
-  setPixel(x = 0, y = 0, options) {
-    options = {...Pixel.defaultOptions, ...options};
-    let pixel = this.newPixels.find(
-      pixel => pixel.x === x && pixel.y === y
-    );
-    if (pixel) {
-      pixel.setOptions(options);
-    } else {
-      pixel = new Pixel(x, y, options);
-      this.newPixels.push(pixel);
-    }
+  set(x, y, options) {
+    this.newPixels.set(x, y, options);
   }
 };
+
+TerminalScreen.TerminalApi = TerminalApi;
+TerminalScreen.PixelCollection = PixelCollection;
 
 module.exports = TerminalScreen;

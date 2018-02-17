@@ -10,32 +10,35 @@ const defaultOptions = {
 const Pixel = class {
   static get defaultOptions() { return defaultOptions; }
 
-  constructor(x = 0, y = 0, options = defaultOptions) {
-    this.x = x;
-    this.y = y;
-    this.setOptions(options);
+  constructor(options = defaultOptions) {
+    this.setOptions(options, true);
   }
-  setOptions(options = defaultOptions) {
-    this.options = {...defaultOptions, ...options};
+  setOptions(options = defaultOptions, force = false) {
+    if (force || this.isDifferent(options)) {
+      this.options = {...defaultOptions, ...options};
+      return true;
+    }
+    return false;
   }
-  isDifferent(pixel = {}) {
+  isDifferent(options = {}) {
+    options = (options instanceof Pixel) ? options.options : options;
     for (const key of ['bgColor', 'fgColor', 'char']) {
-      if (pixel.options[key] !== this.options[key]) {
+      if (options[key] !== this.options[key]) {
         return true;
       }
     };
-    if (pixel.options.styles.length !== this.options.styles.length) {
+    if (options.styles.length !== this.options.styles.length) {
       return true;
     }
-    pixel.options.styles.forEach(style => {
+    for (const style of options.styles) {
       if (!this.options.styles.includes(style)) {
         return true;
       }
-    });
+    };
     return false;
   }
-  isSame(pixel = {}) {
-    return !this.isDifferent(pixel);
+  isSame(options = {}) {
+    return !this.isDifferent(options);
   }
 };
 
