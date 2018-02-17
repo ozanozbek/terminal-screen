@@ -1,8 +1,8 @@
 {
   "name": "terminal-screen",
-  "version": "0.1.0",
-  "description": "",
-  "main": "",
+  "version": "0.1.1",
+  "description": "terminal-screen is a clean abstraction layer over terminal screen.",
+  "main": "source/terminal-screen",
   "scripts": {},
   "repository": {
     "type": "git",
