@@ -2,7 +2,7 @@
 
 const defaultOptions = {
   bgColor: 0,
-  fgColor: 0,
+  fgColor: 255,
   styles: [],
   char: ' ',
 };
@@ -19,11 +19,11 @@ const Pixel = class {
     this.options = {...defaultOptions, ...options};
   }
   isDifferent(pixel = {}) {
-    ['bgColor', 'fgColor', 'char'].forEach(key => {
+    for (const key of ['bgColor', 'fgColor', 'char']) {
       if (pixel.options[key] !== this.options[key]) {
         return true;
       }
-    });
+    };
     if (pixel.options.styles.length !== this.options.styles.length) {
       return true;
     }

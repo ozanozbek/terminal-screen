@@ -60,7 +60,7 @@ const TerminalScreen = class extends TerminalApi {
       this.running = true;
       this.intervalId = setInterval(
         this._step.bind(this),
-        this.interval
+        this.intervalTime
       );
     }
   }

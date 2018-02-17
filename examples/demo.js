@@ -37,8 +37,7 @@ const writeTitle = (title) => {
   });
 };
 
-const step = () => {
-  t.clear();
+const step = (stepNum) => {
   drawBorders();
   writeTitle('terminal-screen');
 };
@@ -46,5 +45,6 @@ const step = () => {
 const t = new TerminalScreen();
 t.setCursor(false);
 t.on('render', step);
-t.setIntervalTime(10000);
+t.setIntervalTime(20);
+t.clear();
 t.start();
