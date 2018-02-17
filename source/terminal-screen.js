@@ -10,8 +10,8 @@ const TerminalScreen = class extends TerminalApi {
     this.intervalId = null;
     this.running = false;
     this.stepNum = 0;
-    this.pixels = new PixelCollection();
-    this.newPixels = new PixelCollection();
+    this.pixels = new PixelCollection;
+    this.newPixels = new PixelCollection;
     this.oldTimeStamp = null;
     this.newTimeStamp = null;
     this.fps = 0;
@@ -41,17 +41,20 @@ const TerminalScreen = class extends TerminalApi {
     this.setIntervalTime(1000 / fps);
   }
   render() {
-    this.newPixels.forEach((newPixel, x, y) => {
-      if (this.pixels.set(x, y, newPixel)) {
-        this._renderPixel(x, y, newPixel);
+    const pixels = this.newPixels;
+    this.newPixels = new PixelCollection;
+    pixels.forEach((pixel, x, y) => {
+      if (this.pixels.set(x, y, pixel)) {
+        this._renderPixel(x, y, pixel);
       }
     });
-    this.newPixels.empty();
-    this.emit('render', this.stepNum);
     this.newTimeStamp = new Date;
+    let delta = 0;
     if (this.oldTimeStamp) {
-      this.fps = Math.round(1000 / (this.newTimeStamp - this.oldTimeStamp));
+      delta = this.newTimeStamp - this.oldTimeStamp;
+      this.fps = Math.round(1000 / delta);
     }
+    this.emit('render', delta);
     this.oldTimeStamp = this.newTimeStamp;
   }
   start(reset = true) {
@@ -80,8 +83,20 @@ const TerminalScreen = class extends TerminalApi {
     this.pixels.empty();
     this.newPixels.empty();
   }
-  set(x, y, options) {
+  set(options, x = 0, y = 0) {
     this.newPixels.set(x, y, options);
+  }
+  fill(
+    options,
+    x = 0, y = 0,
+    width = this.width,
+    height = this.height
+  ) {
+    for (let i = x; i < x + width; i++) {
+      for (let j = y; j < y + height; j++) {
+        this.set(options, i, j);
+      }
+    }
   }
 };
 
