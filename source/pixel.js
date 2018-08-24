@@ -1,8 +1,8 @@
 'use strict';
 
 const defaultOptions = {
-  bgColor: 0,
-  fgColor: 255,
+  bgColor: null,
+  fgColor: null,
   styles: [],
   char: ' ',
 };

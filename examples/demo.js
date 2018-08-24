@@ -26,11 +26,11 @@ const drawBorders = () => {
 };
 
 const writeTitle = (title) => {
-  title.split('').join(' ').split('').forEach((char, i) => {
+  title.split('').forEach((char, i) => {
     t.set({
       char: char,
       fgColor: t.colors.gray[23 - ((t.stepNum % 8) * 3)]
-    }, (t.width / 2) - title.length + i, t.height / 2);
+    }, (t.width / 2) - title.length + (i * 2), t.height / 2);
   });
 };
 

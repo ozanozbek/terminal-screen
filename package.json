@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/ozanozbek/terminal-screen",
   "dependencies": {
-    "terminal-api": "^0.1.6"
+    "terminal-api": "^0.1.7"
   }
 }
